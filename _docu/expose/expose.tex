@@ -1,0 +1,35 @@
+% !TeX spellcheck = en_US
+
+% Master Project: Exposé
+% Alexandra Müller & Leonie Ferdinand
+% Hochschule RheinMain – University of Applied Sciences and Arts (HSRM)
+
+\documentclass[12pt,english]{report}
+
+% Load the preamble with all packages and settings
+\input{preamble}
+
+% Begin the document
+\begin{document}
+\pagenumbering{arabic}  % Start page numbering
+
+
+% Title / Header
+{\noindent\Huge Tangible Virtual Reality: Evaluating the Impact of Real-World Objects on Immersion}\\
+{Media Computer Science {-} Intelligent and Interactive Systems}\\
+{Faculty of Design Computer Science Media (DCSM)}\\[0.5cm]
+{Alexandra R. Müller \& Leonie F. E. Ferdinand}\\
+{(\{alexandra.mueller\_1, leoniefranziskaelisabeth.ferdinand\}@student.hs-rm.de)}\\
+{\today}\\
+\noindent\rule{\textwidth}{0.2pt}
+
+% Include text of the expose
+\input{paragraph.tex}
+
+% Appendices and bibliography
+\appendix
+\clearpage
+\pagenumbering{roman}
+\printbibliography[heading=bibintoc]
+
+\end{document}

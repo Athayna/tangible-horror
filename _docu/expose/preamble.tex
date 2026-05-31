@@ -1,0 +1,154 @@
+% !TeX root = expose.tex
+% !TeX spellcheck = en_US
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% 1. DOCUMENT SETUP
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Language and encoding settings
+\usepackage[utf8]{inputenc}                                                 % Set input encoding to UTF-8
+\usepackage[english]{babel}                                                 % Language support for English
+\usepackage{csquotes}                                                       % Required for proper quotation with biblatex
+
+% Page geometry
+\usepackage[a4paper,left=4cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}  % Page margins
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% 2. FONT AND TYPOGRAPHY SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Font settings
+\renewcommand{\familydefault}{\sfdefault}                                   % Use sans serif as default font
+% \usepackage{helvet}                                                        % Use Helvetica font
+
+% Text formatting
+\usepackage{microtype}                                                      % Improve text appearance with micro typography
+\usepackage{setspace}                                                       % For controlling line spacing
+\linespread{1.5}                                                            % Set line spacing to 1.5
+\setlength{\parskip}{1em}                                                   % Space between paragraphs to line height
+\setlength{\parindent}{0pt}                                                 % No indentation at start of paragraphs
+
+% Hyphenation and line breaking settings
+\tolerance=500                                                              % Moderate spacing flexibility (not too loose)
+\emergencystretch=2em                                                       % Emergency stretch for difficult lines
+\hyphenpenalty=400                                                          % Moderate penalty for hyphenation
+
+% URL handling
+\usepackage[hyphens]{url}                                                   % Allow hyphenation in URLs
+\usepackage{xurl}                                                           % Allow line breaks in URLs
+
+% Debug settings
+%\overfullrule=2.5cm                                                        % Show overfull boxes with a 2.5cm rule
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% 3. DOCUMENT STRUCTURE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{subfiles}                                                       % Allow subfiles for modular document structure
+\usepackage{titlesec}                                                       % Customize chapter/section titles
+
+% Chapter formatting to put number and title on same line
+\titleformat{\chapter}[hang]
+  {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{50pt}{40pt}
+
+% Footnote settings
+\usepackage[bottom]{footmisc}                                               % Place footnotes at bottom of page
+\renewcommand{\footnoterule}{\vspace{1.5ex}\hrule width 0.4\columnwidth\vspace{1.5ex}} % Custom footnote rule
+\renewcommand{\footnotelayout}{\setstretch{1}}                              % Single spacing in footnotes
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% 4. GRAPHICS AND VISUAL ELEMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}                                                       % Include graphics
+\graphicspath{ {./assets/images/} }                                         % Set graphics path
+\usepackage{float}                                                          % For precise figure placement with [H]
+\usepackage{array}                                                          % Advanced table features
+\usepackage{listings}                                                       % Code listings
+\usepackage{xcolor}                                                         % For colored code
+
+% Configure listings for Python
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+
+\lstdefinestyle{pythonstyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single,
+    rulecolor=\color{black!30}
+}
+
+\lstset{style=pythonstyle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% 5. BIBLIOGRAPHY AND CITATION SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[
+  style=numeric,                % Use numeric citation style (like [1], [2], etc.)
+  sorting=none,                 % Sort by citation order
+  backend=biber,                % Use biber backend for better Unicode support
+  urldate=long,                 % Full date format for URL access dates
+  url=true,                     % Show URLs
+  doi=true,                     % Show DOIs
+  isbn=false,                   % Don't show ISBNs
+  maxbibnames=99,               % Show all author names
+  date=long,                    % Show full dates
+  giveninits=false,             % Show full first names
+  dateabbrev=false              % Don't abbreviate dates
+]{biblatex}
+
+% Bibliography customization
+\addbibresource{bibliography.bib}
+
+% Format to include day in dates
+\DeclareFieldFormat{date}{\iffieldundef{day}{\printfield{month} \printfield{year}}{\printfield{day}.\printfield{month}.\printfield{year}}}
+
+% Format for URL access dates
+\DeclareFieldFormat{urldate}{\mkbibparens{\bibstring{urlfrom} \thefield{urlday}.\thefield{urlmonth}.\thefield{urlyear}}}
+\DeclareFieldFormat{title}{\mkbibquote{\textit{#1}}}   % Format titles in italics with quotes
+\DeclareFieldFormat{url}{\url{#1}}                     % Format URLs
+\renewcommand*{\mkbibnamegiven}[1]{#1}                 % Full first names
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% 6. HYPERLINKS AND PDF SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{hyperref}                                                      % Hyperlinks in PDF (must be loaded last)
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  filecolor=black,
+  urlcolor=blue,
+  citecolor=black,
+  pdftitle={Master Project Exposé},
+  pdfauthor={Alexandra R. Müller & Leonie F. E. Ferdinand},
+  pdfsubject={Master Project Hochschule RheinMain},
+  pdfkeywords={Master Project, Exposé, Hochschule RheinMain, HCI, VR},
+  bookmarksnumbered=true,
+  pdfstartview=FitH
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% 7. PAGE STYLING (HEADERS/FOOTERS)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fancy Header (commented out - uncomment if needed)
+% \usepackage{fancyhdr}
+% \setlength{\headheight}{14pt}                                             % Fix header height for fancyhdr
+% \pagestyle{fancy}
+% \fancyhf{}                                                                % Clear all header/footer fields
+% \fancyhead[L]{\leftmark}                                                  % Chapter name on the left
+% \fancyhead[R]{\thepage}                                                   % Page number on the right
+% \renewcommand{\headrulewidth}{0.5pt}                                      % Header rule
+% \renewcommand{\footrulewidth}{0pt}                                        % No footer rule
