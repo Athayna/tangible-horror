@@ -301,6 +301,8 @@ GameObject:
   - component: {fileID: 4363554580179587850}
   - component: {fileID: 5304479918051343434}
   - component: {fileID: 7980006738778596980}
+  - component: {fileID: 852813102820163189}
+  - component: {fileID: 3570891655499912414}
   m_Layer: 0
   m_Name: EyeAdvanced_LOD
   m_TagString: Untagged
@@ -316,17 +318,17 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100006}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0037030792, y: 0.99421257, z: -0.03645612, w: 0.10098848}
+  m_LocalRotation: {x: 0.0037030783, y: 0.9942125, z: -0.036456082, w: 0.10098855}
   m_LocalPosition: {x: -0.061538305, y: 0.9814975, z: -9.612193}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 400000}
   - {fileID: 400002}
   - {fileID: 400004}
   - {fileID: 4753250403455947458}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 4.2, y: 168.4, z: 0}
 --- !u!205 &20500000
 LODGroup:
   m_ObjectHideFlags: 0
@@ -341,11 +343,11 @@ LODGroup:
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.05271076
+  - screenRelativeHeight: 0.022265991
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 2300000}
-  - screenRelativeHeight: 0.012009582
+  - screenRelativeHeight: 0.0030263187
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 2300002}
@@ -362,7 +364,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100006}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -376,8 +378,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -425,6 +427,48 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.04444341, y: 0.044443406, z: 0.045229815}
   m_Center: {x: -0.0012295358, y: 0, z: -0.0015143044}
+--- !u!135 &852813102820163189
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100006}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.025
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &3570891655499912414
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100006}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.025
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6813367632616312565
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,8 +530,8 @@ MonoBehaviour:
     _thumbRequirement: 0
     _indexRequirement: 1
     _middleRequirement: 1
-    _ringRequirement: 0
-    _pinkyRequirement: 0
+    _ringRequirement: 1
+    _pinkyRequirement: 1
     _unselectMode: 1
   _palmGrabRules:
     _thumbRequirement: 1
