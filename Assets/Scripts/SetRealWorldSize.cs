@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class SetRealWorldSize : MonoBehaviour
 {
-    [SerializeField]
-    private readonly float targetWidthCm = 25f;
+    [SerializeField] private float targetWidthCm = 25f;
 
     void Start()
     {
