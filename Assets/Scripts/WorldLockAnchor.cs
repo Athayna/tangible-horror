@@ -12,6 +12,9 @@ public class WorldLockAnchor : MonoBehaviour
     private Transform referenceObject;
 
     private const string AnchorUuidKey = "WorldLockAnchorUuid";
+    private const string ScaleXKey = "WorldLockAnchorScaleX";
+    private const string ScaleYKey = "WorldLockAnchorScaleY";
+    private const string ScaleZKey = "WorldLockAnchorScaleZ";
     private OVRSpatialAnchor currentAnchor;
 
     /// <summary>
@@ -43,8 +46,14 @@ public class WorldLockAnchor : MonoBehaviour
         if (saveResult.Success)
         {
             PlayerPrefs.SetString(AnchorUuidKey, currentAnchor.Uuid.ToString());
+
+            Vector3 scale = referenceObject.localScale;
+            PlayerPrefs.SetFloat(ScaleXKey, scale.x);
+            PlayerPrefs.SetFloat(ScaleYKey, scale.y);
+            PlayerPrefs.SetFloat(ScaleZKey, scale.z);
+
             PlayerPrefs.Save();
-            Debug.Log($"[WorldLockAnchor] Created and saved anchor {currentAnchor.Uuid}");
+            Debug.Log($"[WorldLockAnchor] Created and saved anchor {currentAnchor.Uuid} with scale {scale}");
         }
         else
         {
@@ -94,6 +103,17 @@ public class WorldLockAnchor : MonoBehaviour
         if (unbound.TryGetPose(out Pose pose) && referenceObject != null)
         {
             referenceObject.SetPositionAndRotation(pose.position, pose.rotation);
+
+            if (PlayerPrefs.HasKey(ScaleXKey))
+            {
+                Vector3 scale = new Vector3(
+                    PlayerPrefs.GetFloat(ScaleXKey),
+                    PlayerPrefs.GetFloat(ScaleYKey),
+                    PlayerPrefs.GetFloat(ScaleZKey));
+                referenceObject.localScale = scale;
+                Debug.Log($"[WorldLockAnchor] Restored scale {scale}");
+            }
+
             Debug.Log($"[WorldLockAnchor] Loaded and aligned to anchor {uuid}");
         }
     }
@@ -123,6 +143,9 @@ public class WorldLockAnchor : MonoBehaviour
         if (PlayerPrefs.HasKey(AnchorUuidKey))
         {
             PlayerPrefs.DeleteKey(AnchorUuidKey);
+            PlayerPrefs.DeleteKey(ScaleXKey);
+            PlayerPrefs.DeleteKey(ScaleYKey);
+            PlayerPrefs.DeleteKey(ScaleZKey);
             PlayerPrefs.Save();
         }
     }
