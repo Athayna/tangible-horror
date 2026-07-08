@@ -8,8 +8,9 @@ using Meta.XR.MRUtilityKit;
 /// </summary>
 public class WorldLockAnchor : MonoBehaviour
 {
-    [SerializeField]
-    private Transform referenceObject;
+    [SerializeField] private Transform referenceObject;
+
+    [SerializeField] private Transform table;
 
     private const string AnchorUuidKey = "WorldLockAnchorUuid";
     private const string ScaleXKey = "WorldLockAnchorScaleX";
@@ -47,7 +48,7 @@ public class WorldLockAnchor : MonoBehaviour
         {
             PlayerPrefs.SetString(AnchorUuidKey, currentAnchor.Uuid.ToString());
 
-            Vector3 scale = referenceObject.localScale;
+            Vector3 scale = table.localScale;
             PlayerPrefs.SetFloat(ScaleXKey, scale.x);
             PlayerPrefs.SetFloat(ScaleYKey, scale.y);
             PlayerPrefs.SetFloat(ScaleZKey, scale.z);
@@ -110,7 +111,7 @@ public class WorldLockAnchor : MonoBehaviour
                     PlayerPrefs.GetFloat(ScaleXKey),
                     PlayerPrefs.GetFloat(ScaleYKey),
                     PlayerPrefs.GetFloat(ScaleZKey));
-                referenceObject.localScale = scale;
+                table.localScale = scale;
                 Debug.Log($"[WorldLockAnchor] Restored scale {scale}");
             }
 

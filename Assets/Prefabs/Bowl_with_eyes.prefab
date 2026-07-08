@@ -887,7 +887,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
@@ -1080,10 +1080,6 @@ PrefabInstance:
     - target: {fileID: 400006, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
-      propertyPath: m_Mass
-      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
