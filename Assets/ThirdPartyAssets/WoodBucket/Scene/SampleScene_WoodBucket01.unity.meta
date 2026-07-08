@@ -10,5 +10,5 @@ AssetOrigin:
   productId: 225622
   packageName: 'Wood Bucket : Standard + Dirty'
   packageVersion: 1.0
-  assetPath: Assets/WoodBucket/Scene/SampleScene_WoodBucket01.unity
+  assetPath: Assets/ThirdPartyAssets/WoodBucket/Scene/SampleScene_WoodBucket01.unity
   uploadId: 508294

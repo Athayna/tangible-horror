@@ -95,5 +95,5 @@ AssetOrigin:
   productId: 225622
   packageName: 'Wood Bucket : Standard + Dirty'
   packageVersion: 1.0
-  assetPath: Assets/WoodBucket/Textures/WoodBucket_02_Dirty_MetallicSmoothness.png
+  assetPath: Assets/ThirdPartyAssets/WoodBucket/Textures/WoodBucket_02_Dirty_MetallicSmoothness.png
   uploadId: 508294

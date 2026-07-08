@@ -13,5 +13,5 @@ AssetOrigin:
   productId: 98014
   packageName: Cabin Environment
   packageVersion: 1.0
-  assetPath: Assets/Cabin/Prefabs/Door.prefab
+  assetPath: Assets/ThirdPartyAssets/Cabin/Prefabs/Door.prefab
   uploadId: 195923

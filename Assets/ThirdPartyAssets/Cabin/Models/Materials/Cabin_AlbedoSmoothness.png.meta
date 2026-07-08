@@ -85,5 +85,5 @@ AssetOrigin:
   productId: 98014
   packageName: Cabin Environment
   packageVersion: 1.0
-  assetPath: Assets/Cabin/Models/Materials/Cabin_AlbedoSmoothness.png
+  assetPath: Assets/ThirdPartyAssets/Cabin/Models/Materials/Cabin_AlbedoSmoothness.png
   uploadId: 195923

@@ -77,5 +77,5 @@ AssetOrigin:
   productId: 98014
   packageName: Cabin Environment
   packageVersion: 1.0
-  assetPath: Assets/Cabin/Terrain/Tree/Tree_Textures/translucency_gloss.png
+  assetPath: Assets/ThirdPartyAssets/Cabin/Terrain/Tree/Tree_Textures/translucency_gloss.png
   uploadId: 195923
