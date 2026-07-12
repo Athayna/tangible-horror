@@ -342,11 +342,10 @@ GameObject:
   - component: {fileID: 20500000}
   - component: {fileID: 4363554580179587850}
   - component: {fileID: 5304479918051343434}
-  - component: {fileID: 7980006738778596980}
   - component: {fileID: 7189282523591763610}
   - component: {fileID: 3790052335719017799}
   m_Layer: 6
-  m_Name: EyeAdvanced_LOD_0807
+  m_Name: EyeAdvanced_LOD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -448,27 +447,6 @@ MonoBehaviour:
   _kinematicWhileSelected: 1
   _throwWhenUnselected: 1
   _forceKinematicDisabled: 0
---- !u!65 &7980006738778596980
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100006}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 0.04444341, y: 0.044443406, z: 0.045229815}
-  m_Center: {x: -0.0012295358, y: 0, z: -0.0015143044}
 --- !u!135 &7189282523591763610
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -567,23 +545,23 @@ MonoBehaviour:
   _scoringModifier:
     _positionRotationWeight: 0.5
   _slippiness: 0
-  _supportedGrabTypes: 1
+  _supportedGrabTypes: -1
   _pinchGrabRules:
-    _thumbRequirement: 0
+    _thumbRequirement: 1
     _indexRequirement: 1
     _middleRequirement: 1
-    _ringRequirement: 1
-    _pinkyRequirement: 1
+    _ringRequirement: 0
+    _pinkyRequirement: 0
     _unselectMode: 1
   _palmGrabRules:
-    _thumbRequirement: 1
-    _indexRequirement: 0
+    _thumbRequirement: 2
+    _indexRequirement: 2
     _middleRequirement: 2
     _ringRequirement: 2
     _pinkyRequirement: 1
     _unselectMode: 0
   _movementProvider: {fileID: 0}
-  _handAligment: 0
+  _handAligment: 1
   _handGrabPoses: []
 --- !u!114 &1563285792316868371
 MonoBehaviour:
