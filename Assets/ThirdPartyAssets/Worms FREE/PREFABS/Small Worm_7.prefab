@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 1421403603345147352}
   - component: {fileID: 1665945484027401590}
   - component: {fileID: 7085503248643302794}
+  - component: {fileID: 6845247126663246859}
   m_Layer: 0
   m_Name: Small Worm_7
   m_TagString: Untagged
@@ -239,6 +240,27 @@ MonoBehaviour:
   _kinematicWhileSelected: 1
   _throwWhenUnselected: 1
   _forceKinematicDisabled: 0
+--- !u!65 &6845247126663246859
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4816898066486630082}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.04641694, y: 0.039914906, z: 0.19982189}
+  m_Center: {x: 0.00057938695, y: 0.018170036, z: -0.010547146}
 --- !u!1 &4835166113656752979
 GameObject:
   m_ObjectHideFlags: 0
