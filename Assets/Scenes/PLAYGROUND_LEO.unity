@@ -2187,30 +2187,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 31031331806790834, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 331050977310680180, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 604749936301572936, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 683233472906745594, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1090700733561657884, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2988321824968140058, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3010199041676349150, guid: 43721345584a9d14a90cc2139025098d, type: 3}
       propertyPath: m_Name
       value: Bowl_with_eyes
@@ -2254,58 +2230,6 @@ PrefabInstance:
     - target: {fileID: 3229191656282198417, guid: 43721345584a9d14a90cc2139025098d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4139071037868456494, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4463988564739845555, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173944295903233493, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5338338522161733225, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5789517595168908711, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5918309030219612613, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6208042362278213204, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6406127130604502566, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7102450442433003041, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7239199526048683500, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7963692371361330983, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8201797634508493845, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8227856516601883027, guid: 43721345584a9d14a90cc2139025098d, type: 3}
-      propertyPath: m_Mass
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
