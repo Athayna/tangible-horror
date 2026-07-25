@@ -134,13 +134,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -232,13 +241,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -330,13 +348,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -428,13 +455,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -526,13 +562,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -647,13 +692,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -887,13 +941,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.5
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -985,13 +1048,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1082,10 +1154,23 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_Mass
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1177,13 +1262,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1275,13 +1369,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1373,13 +1476,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1471,13 +1583,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1569,13 +1690,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1667,13 +1797,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1765,13 +1904,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1863,13 +2011,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1961,13 +2118,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -2059,13 +2225,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -2157,13 +2332,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_Mass
-      value: 0.2
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_LinearDamping
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363554580179587850, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7123610756817732260, guid: 10fdea72289652342a72853a1b9dc9a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
