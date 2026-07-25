@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2300000}
   - component: {fileID: 11408658}
   - component: {fileID: 9124383034687351748}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: EyeAdvanced_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 3300002}
   - component: {fileID: 2300002}
   - component: {fileID: 190373464814616913}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: EyeAdvanced_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 3300004}
   - component: {fileID: 2300004}
   - component: {fileID: 2640191476405398195}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: EyeAdvanced_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -342,11 +342,11 @@ GameObject:
   - component: {fileID: 20500000}
   - component: {fileID: 4363554580179587850}
   - component: {fileID: 5304479918051343434}
-  - component: {fileID: 7980006738778596980}
   - component: {fileID: 7189282523591763610}
   - component: {fileID: 3790052335719017799}
-  m_Layer: 6
-  m_Name: EyeAdvanced_LOD_0807
+  - component: {fileID: 7123610756817732260}
+  m_Layer: 7
+  m_Name: EyeAdvanced_LOD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -406,7 +406,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100006}
   serializedVersion: 5
-  m_Mass: 0.5
+  m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -414,7 +414,7 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -424,7 +424,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &5304479918051343434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -448,27 +448,6 @@ MonoBehaviour:
   _kinematicWhileSelected: 1
   _throwWhenUnselected: 1
   _forceKinematicDisabled: 0
---- !u!65 &7980006738778596980
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100006}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 0.04444341, y: 0.044443406, z: 0.045229815}
-  m_Center: {x: -0.0012295358, y: 0, z: -0.0015143044}
 --- !u!135 &7189282523591763610
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -511,6 +490,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.017
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7123610756817732260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 502039b6ea7b19646aa13802d93c6bdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExampleClass
+  rb: {fileID: 4363554580179587850}
 --- !u!1 &6813367632616312565
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,7 +514,7 @@ GameObject:
   - component: {fileID: 4753250403455947458}
   - component: {fileID: 6038100766398415565}
   - component: {fileID: 1563285792316868371}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: ISDK_HandGrabInteraction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -567,23 +559,23 @@ MonoBehaviour:
   _scoringModifier:
     _positionRotationWeight: 0.5
   _slippiness: 0
-  _supportedGrabTypes: 1
+  _supportedGrabTypes: -1
   _pinchGrabRules:
-    _thumbRequirement: 0
+    _thumbRequirement: 1
     _indexRequirement: 1
     _middleRequirement: 1
-    _ringRequirement: 1
-    _pinkyRequirement: 1
+    _ringRequirement: 0
+    _pinkyRequirement: 0
     _unselectMode: 1
   _palmGrabRules:
-    _thumbRequirement: 1
-    _indexRequirement: 0
+    _thumbRequirement: 2
+    _indexRequirement: 2
     _middleRequirement: 2
     _ringRequirement: 2
     _pinkyRequirement: 1
     _unselectMode: 0
   _movementProvider: {fileID: 0}
-  _handAligment: 0
+  _handAligment: 1
   _handGrabPoses: []
 --- !u!114 &1563285792316868371
 MonoBehaviour:
