@@ -2,7 +2,14 @@ using UnityEngine;
 
 public class SetRealWorldSize : MonoBehaviour
 {
+    public enum WidthAxis
+    {
+        X,
+        Z
+    }
+
     [SerializeField] private float targetWidthCm = 25f;
+    [SerializeField] private WidthAxis originalWidthAxis = WidthAxis.X;
 
     void Start()
     {
@@ -21,7 +28,9 @@ public class SetRealWorldSize : MonoBehaviour
         }
 
         // Local-space bounds ignore current scale/rotation
-        float originalWidth = mf.sharedMesh.bounds.size.x;
+        float originalWidth = originalWidthAxis == WidthAxis.X
+            ? mf.sharedMesh.bounds.size.x
+            : mf.sharedMesh.bounds.size.z;
 
         if (originalWidth == 0)
         {
