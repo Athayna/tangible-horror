@@ -5883,6 +5883,67 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!1001 &942914991
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2915063547642805669, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.19444
+      objectReference: {fileID: 0}
+    - target: {fileID: 2915063547642805669, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.22763
+      objectReference: {fileID: 0}
+    - target: {fileID: 2915063547642805669, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.37702
+      objectReference: {fileID: 0}
+    - target: {fileID: 2915063547642805669, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2915063547642805669, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2915063547642805669, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2915063547642805669, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2915063547642805669, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2915063547642805669, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2915063547642805669, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6953744227726857641, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8311773657211941253, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+      propertyPath: bloodParent
+      value: 
+      objectReference: {fileID: 1451277720}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
 --- !u!1 &1006675835
 GameObject:
   m_ObjectHideFlags: 0
@@ -16490,52 +16551,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!1 &1852199595
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1852199596}
-  - component: {fileID: 1852199597}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1852199596
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1852199595}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.7231, y: 1.41307, z: 1.09495}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1852199597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1852199595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b69652ac00ef4cc459fa451d3115b67e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  pipeCoin: {fileID: 0}
-  bloodParent: {fileID: 1451277720}
 --- !u!1 &1899458927 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 1276437f6e50eee40bb491b6c68d486b, type: 3}
@@ -16912,4 +16927,4 @@ SceneRoots:
   - {fileID: 1943925874}
   - {fileID: 1219352834}
   - {fileID: 1451277719}
-  - {fileID: 1852199596}
+  - {fileID: 942914991}
