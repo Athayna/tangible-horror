@@ -50,12 +50,12 @@ Third-party assets live under `Assets/ThirdPartyAssets/` and are excluded from t
 To run the project locally, re-acquire the following packs and place each one in `Assets/ThirdPartyAssets/` under the folder name given below (keep the original `.meta` files from the packs so asset references resolve):
 
 | Folder | Asset pack | Source |
-|---|------------|--------|
+|---|-----------|--------|
 | `Altar_Ruins_FREE` | Altar Ruins Free | [Unity Asset Store](https://assetstore.unity.com/packages/3d/environments/fantasy/altar-ruins-free-109065) |
 | `Bowl` | Old Rusted Bowl | [Unity Asset Store](https://assetstore.unity.com/packages/3d/props/electronics/old-rusted-bowl-24448) |
 | `Cabin` | Cabin Environment | [Unity Asset Store](https://assetstore.unity.com/packages/3d/environments/cabin-environment-98014) |
 | `EYE ADVANCED` | Eye Advanced | [Unity Asset Store](https://assetstore.unity.com/packages/3d/characters/eye-advanced-30762) |
-| `MeasureMaster` | MeasureMaster - Measurement Tool | [Unity Asset Store](https://assetstore.unity.com/packages/tools/utilities/measuremaster-measurement-tool-294420) |
+| `BloodDecalsAndEffects` | Blood Gush | [Unity Asset Store](https://assetstore.unity.com/packages/vfx/particles/blood-gush-73426) |
 | `WoodBucket` | Wood Bucket : Standard + Dirty | [Unity Asset Store](https://assetstore.unity.com/packages/3d/props/interior/wood-bucket-standard-dirty-225622) |
 | `Worms FREE` | Worms FREE | [Unity Asset Store](https://assetstore.unity.com/packages/3d/characters/worms-free-342926) |
 
