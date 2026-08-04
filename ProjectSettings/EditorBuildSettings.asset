@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/ThirdPartyAssets/Cabin/Demo.unity
     guid: 87f6424a65482154da4cd74381650bd3
   - enabled: 0
-    path: Assets/Scenes/MainScene_0807.unity
+    path: Assets/Scenes/MainScene.unity
     guid: 7e902fc8a6dde444d97fe7db6f0d7d95
   - enabled: 0
     path: Assets/Scenes/Postersession_HighTable.unity
