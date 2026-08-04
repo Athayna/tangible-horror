@@ -56,6 +56,7 @@ To run the project locally, re-acquire the following packs and place each one in
 | `Cabin` | Cabin Environment | [Unity Asset Store](https://assetstore.unity.com/packages/3d/environments/cabin-environment-98014) |
 | `EYE ADVANCED` | Eye Advanced | [Unity Asset Store](https://assetstore.unity.com/packages/3d/characters/eye-advanced-30762) |
 | `BloodDecalsAndEffects` | Blood Gush | [Unity Asset Store](https://assetstore.unity.com/packages/vfx/particles/blood-gush-73426) |
+| `Pipe constructor` | Pipe constructor | [Unity Asset Store](https://assetstore.unity.com/packages/3d/environments/industrial/pipe-constructor-186974) |
 | `WoodBucket` | Wood Bucket : Standard + Dirty | [Unity Asset Store](https://assetstore.unity.com/packages/3d/props/interior/wood-bucket-standard-dirty-225622) |
 | `Worms FREE` | Worms FREE | [Unity Asset Store](https://assetstore.unity.com/packages/3d/characters/worms-free-342926) |
 
