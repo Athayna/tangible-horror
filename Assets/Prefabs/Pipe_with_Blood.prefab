@@ -45,11 +45,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4437282294267811141}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d999e17a3579e354aa01e44bcf89f45c, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d706201a0d7bd6448aeee48f4ecf19a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CollisionManager
   listenToTriggers: 1
-  listenToCollisions: 0
+  listenToCollisions: 1
   assignedCollider: {fileID: 827604715267192089}
   onEnter:
     m_PersistentCalls:
@@ -59,19 +59,7 @@ MonoBehaviour:
       m_Calls: []
   onExit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: StartBloodSpray
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   toggleOnEnter: []
   toggleOnStay: []
   toggleOnExit: []
