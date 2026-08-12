@@ -6069,6 +6069,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+--- !u!114 &942914992 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8311773657211941253, guid: 7531b4d14c047da4c9ca52fea5804c90, type: 3}
+  m_PrefabInstance: {fileID: 942914991}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b69652ac00ef4cc459fa451d3115b67e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
 --- !u!4 &965879649 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7936296057994636145, guid: 9027951b3d4314031a9f12f93b041505, type: 3}
@@ -16080,6 +16091,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 827604715267192089, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: m_Height
+      value: 0.22212458
+      objectReference: {fileID: 0}
+    - target: {fileID: 827604715267192089, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: m_Radius
+      value: 0.087329626
+      objectReference: {fileID: 0}
+    - target: {fileID: 827604715267192089, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: m_Center.x
+      value: -0.0076408386
+      objectReference: {fileID: 0}
+    - target: {fileID: 827604715267192089, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: m_Center.y
+      value: -0.005511403
+      objectReference: {fileID: 0}
+    - target: {fileID: 827604715267192089, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: m_Center.z
+      value: 0.0027236938
+      objectReference: {fileID: 0}
     - target: {fileID: 949182491363448362, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.615
@@ -16123,6 +16154,58 @@ PrefabInstance:
     - target: {fileID: 4437282294267811141, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
       propertyPath: m_Name
       value: Pipe_with_Blood
+      objectReference: {fileID: 0}
+    - target: {fileID: 5621186774252065398, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5621186774252065398, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: stopAction
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5621186774252065398, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: lengthInSec
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5656342761990916580, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5656342761990916580, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: stopAction
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5656342761990916580, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: lengthInSec
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8543942045975171375, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: onExit.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8543942045975171375, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: onExit.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8543942045975171375, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: onExit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 942914992}
+    - target: {fileID: 8543942045975171375, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: onExit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8543942045975171375, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: onExit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StartBloodSpray
+      objectReference: {fileID: 0}
+    - target: {fileID: 8543942045975171375, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: onExit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8543942045975171375, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
+      propertyPath: onExit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7208488591752160250, guid: f8f7d7b0cd4c3b340a2f82ede85257de, type: 3}
