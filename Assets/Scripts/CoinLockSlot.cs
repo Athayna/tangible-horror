@@ -1,25 +1,21 @@
 using Meta.WitAi;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class CoinLockSlot : MonoBehaviour
 {
-    private GameObject _doubloon;
+    [SerializeField] private GameObject doubloonMesh;
     public UnityEvent onCoinInserted;
-
-    private void Start()
-    {
-        _doubloon = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/ThirdPartyAssets/Doubloon/doubloon.obj");
-    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Doubloon")) return;
+        if (!other.CompareTag("Doubloon")) return;
 
         other.gameObject.DestroySafely();
-        Instantiate(_doubloon, transform.position, transform.rotation);
+        GameObject doubloon = Instantiate(doubloonMesh, transform.position, transform.rotation);
+        doubloon.transform.localRotation = Quaternion.Euler(0, 0, 90);
+        doubloon.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
         onCoinInserted.Invoke();
-        Destroy(gameObject);
+        Destroy(this);
     }
 }
