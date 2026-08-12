@@ -7,6 +7,7 @@ TagManager:
   - QDSUIBackplateGradient
   - QDSUIIcon
   - QDSUISecondaryButton
+  - Doubloon
   layers:
   - Default
   - TransparentFX

@@ -1,0 +1,25 @@
+# Exported by three-d-stage
+newmtl iron_black
+Kd 0.0685 0.0704 0.0762
+Ks 0.2000 0.2000 0.2000
+Ns 76
+d 1.0000
+
+newmtl socket_shadow
+Kd 0.0123 0.0116 0.0103
+Ks 0.2000 0.2000 0.2000
+Ns 10
+d 1.0000
+
+newmtl brass_tarnish
+Kd 0.3325 0.2195 0.0595
+Ks 0.2000 0.2000 0.2000
+Ns 116
+d 1.0000
+
+newmtl iron_worn
+Kd 0.1559 0.1590 0.1683
+Ks 0.2000 0.2000 0.2000
+Ns 112
+d 1.0000
+
