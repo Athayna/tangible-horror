@@ -11,6 +11,7 @@ public class CoinLockSlot : MonoBehaviour
     {
         if (!other.CompareTag("Doubloon")) return;
 
+        other.GetComponent<Collider>().enabled = false;
         other.gameObject.DestroySafely();
         GameObject doubloon = Instantiate(doubloonMesh, transform.position, transform.rotation);
         doubloon.transform.localRotation = Quaternion.Euler(0, 0, 90);
