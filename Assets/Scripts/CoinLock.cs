@@ -27,7 +27,7 @@ public class CoinLock : MonoBehaviour
 
     private void CheckWinCondition()
     {
-        if (_coins == _winCondition)
+        if (_coins >= _winCondition)
         {
             onGameOver.Invoke();
         }

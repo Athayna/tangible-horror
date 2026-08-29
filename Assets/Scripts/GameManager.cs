@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(WinScreen))]
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject pipeCoin;
@@ -18,8 +19,8 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-        // TODO: Change scene to result screen via coroutine or display results
         Debug.Log("Congratulations!");
+        GetComponent<WinScreen>().Show();
     }
 
     #region Pipe
