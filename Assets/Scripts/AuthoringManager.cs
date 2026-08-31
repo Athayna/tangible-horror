@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Oculus.Interaction;
-using Oculus.Interaction.HandGrab;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
 /// Runtime authoring of the content below the LocationRoot: moves and scales the selected
-/// target, switches grab on objects on and off and stores the authored layout
+/// target and stores the authored layout
 /// </summary>
 public class AuthoringManager : MonoBehaviour
 {
@@ -60,11 +58,6 @@ public class AuthoringManager : MonoBehaviour
     [SerializeField] private Transform locationRoot;
     [SerializeField] private FurnitureGroup[] furniture = Array.Empty<FurnitureGroup>();
 
-    [Header("Grab")]
-    [Tooltip("Objects whose grab components get (de)activated, the components themselves are attached by hand")]
-    [SerializeField] private GameObject[] grabbables = Array.Empty<GameObject>();
-    [SerializeField] private bool grabEnabledOnStart = true;
-
     [Header("Step size")]
     [SerializeField] private float moveValue = 0.01f;
     [SerializeField] private float scaleValue = 0.1f;
@@ -81,14 +74,12 @@ public class AuthoringManager : MonoBehaviour
     // Everything the buttons can act on, in the order they are cycled through
     private readonly List<AuthoringTarget> targets = new();
     private int selection;
-    private bool grabEnabled;
 
     private void Start()
     {
         BuildTargets();
         BindStepField(moveValueField, moveValue, SetMoveValue);
         BindStepField(scaleValueField, scaleValue, SetScaleValue);
-        SetGrabEnabled(grabEnabledOnStart);
         Select(0);
     }
 
@@ -239,42 +230,6 @@ public class AuthoringManager : MonoBehaviour
 
         field.text = value.ToString(CultureInfo.InvariantCulture);
         field.onEndEdit.AddListener(setter);
-    }
-
-    #endregion
-
-    #region Grab
-
-    public void EnableGrab() => SetGrabEnabled(true);
-
-    public void DisableGrab() => SetGrabEnabled(false);
-
-    public void ToggleGrab() => SetGrabEnabled(!grabEnabled);
-
-    /// <summary>
-    /// Switches the grab components on the assigned objects and their children on or off
-    /// </summary>
-    public void SetGrabEnabled(bool value)
-    {
-        grabEnabled = value;
-
-        foreach (GameObject grabbable in grabbables)
-        {
-            if (grabbable == null)
-                continue;
-
-            SetComponentsEnabled<Grabbable>(grabbable, value);
-            SetComponentsEnabled<GrabInteractable>(grabbable, value);
-            SetComponentsEnabled<DistanceGrabInteractable>(grabbable, value);
-            SetComponentsEnabled<HandGrabInteractable>(grabbable, value);
-            SetComponentsEnabled<DistanceHandGrabInteractable>(grabbable, value);
-        }
-    }
-
-    private static void SetComponentsEnabled<T>(GameObject target, bool value) where T : MonoBehaviour
-    {
-        foreach (T component in target.GetComponentsInChildren<T>(true))
-            component.enabled = value;
     }
 
     #endregion

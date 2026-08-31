@@ -6,7 +6,15 @@ using UnityEngine.Serialization;
 using Meta.XR.MRUtilityKit;
 
 /// <summary>
-/// Script containing methods to create, load and delete the world lock anchor the LocationRoot is aligned to
+/// Script containing methods to create, load and delete the world lock anchor the LocationRoot is aligned to.
+///
+/// The LocationRoot is parented under the spatial anchor instead of being positioned from the anchor pose,
+/// and MRUK's own world lock stays off on purpose:
+/// MRUK's world lock keeps room anchors aligned by moving the OVRCameraRig/TrackingSpace transform every
+/// frame. This project loads no room data at all, so there is nothing to gain from it - but it would move
+/// the whole tracking space under the marker tracking, whose camera poses belong to an earlier capture
+/// timestamp. Parenting corrects the content exactly where the content is, and leaves tracking space
+/// identical to world space.
 /// </summary>
 public class WorldLockAnchor : MonoBehaviour
 {
@@ -23,24 +31,37 @@ public class WorldLockAnchor : MonoBehaviour
     private const string AnchorUuidKey = "WorldLockAnchorUuid";
     private OVRSpatialAnchor currentAnchor;
 
+    // Where the LocationRoot hangs while it is not attached to an anchor
+    private Transform originalParent;
+
     private static Guid StoredUuid =>
         Guid.TryParse(PlayerPrefs.GetString(AnchorUuidKey, string.Empty), out Guid uuid) ? uuid : Guid.Empty;
+
+    /// <summary>True while the content is parented under a localized spatial anchor.</summary>
+    public bool IsAnchored => currentAnchor != null && locationRoot != null && locationRoot.parent == currentAnchor.transform;
 
     private void Awake()
     {
         if (authoring == null)
             authoring = GetComponent<AuthoringManager>();
+
+        if (locationRoot != null)
+            originalParent = locationRoot.parent;
     }
 
     private void Start()
     {
+        // MRUK ships with EnableWorldLock set to true, so switch it off before its first Update runs
+        DisableMrukWorldLock();
+
         if (loadOnStart && StoredUuid != Guid.Empty)
             LoadAnchor();
     }
 
     /// <summary>
-    /// Spawns a spatial anchor at the LocationRoot's pose and saves it together with the current layout,
-    /// an already stored anchor is erased first so creating a new one simply overwrites it
+    /// Spawns a spatial anchor at the LocationRoot's pose, parents the content under it and saves it
+    /// together with the current layout, an already stored anchor is erased first so creating a new one
+    /// simply overwrites it
     /// </summary>
     public async void CreateAnchor()
     {
@@ -73,16 +94,19 @@ public class WorldLockAnchor : MonoBehaviour
         PlayerPrefs.SetString(AnchorUuidKey, currentAnchor.Uuid.ToString());
         PlayerPrefs.Save();
 
+        // The anchor sits exactly at the LocationRoot's pose, so attaching does not move the content
+        AttachToAnchor();
+
         if (authoring != null)
             authoring.SaveLayout();
 
-        SetWorldLock(true);
         Debug.Log($"[WorldLockAnchor] Created and saved anchor {currentAnchor.Uuid}");
     }
 
     /// <summary>
-    /// Retrieves the saved anchor, snaps the LocationRoot onto it, restores the layout
-    /// and turns the world lock on once the anchor is localized
+    /// Retrieves the saved anchor, parents the LocationRoot under it and restores the layout.
+    /// From then on OVRSpatialAnchor keeps the anchor on its real world spot every frame and the
+    /// content follows along, drift correction included
     /// </summary>
     public async void LoadAnchor()
     {
@@ -124,20 +148,18 @@ public class WorldLockAnchor : MonoBehaviour
         currentAnchor = anchorGo.AddComponent<OVRSpatialAnchor>();
         unbound.BindTo(currentAnchor);
 
-        if (!unbound.TryGetPose(out Pose pose))
-        {
-            Debug.LogError("[WorldLockAnchor] Anchor has no pose.");
-            DestroyCurrentAnchor();
-            return;
-        }
+        // Place the anchor object right away, otherwise the content would pop for a frame
+        if (unbound.TryGetPose(out Pose pose))
+            anchorGo.transform.SetPositionAndRotation(pose.position, pose.rotation);
+        else
+            Debug.LogWarning("[WorldLockAnchor] Anchor has no pose yet, waiting for the component to update it.");
 
-        locationRoot.SetPositionAndRotation(pose.position, pose.rotation);
+        AttachToAnchor();
 
         if (authoring != null)
             authoring.RestoreLayout();
 
-        SetWorldLock(true);
-        Debug.Log($"[WorldLockAnchor] Loaded and aligned to anchor {uuid}");
+        Debug.Log($"[WorldLockAnchor] Loaded and attached to anchor {uuid}");
     }
 
     /// <summary>
@@ -172,9 +194,33 @@ public class WorldLockAnchor : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    // Hangs the content under the anchor. The anchor always sits where the content belongs, so the
+    // local pose is zeroed instead of being kept.
+    private void AttachToAnchor()
+    {
+        if (locationRoot == null || currentAnchor == null)
+            return;
+
+        // Reparent keeping the world transform first, so a scaled old parent cannot change the content
+        // size, then snap the local pose onto the anchor
+        locationRoot.SetParent(currentAnchor.transform, true);
+        locationRoot.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+    }
+
+    // Puts the content back where it hung before, keeping its world pose so nothing jumps
+    private void DetachFromAnchor()
+    {
+        if (locationRoot == null || currentAnchor == null)
+            return;
+
+        if (locationRoot.parent == currentAnchor.transform)
+            locationRoot.SetParent(originalParent, true);
+    }
+
     private void DestroyCurrentAnchor()
     {
-        SetWorldLock(false);
+        // Has to happen first, otherwise the content would be destroyed together with the anchor
+        DetachFromAnchor();
 
         if (currentAnchor == null)
             return;
@@ -183,18 +229,18 @@ public class WorldLockAnchor : MonoBehaviour
         currentAnchor = null;
     }
 
-    // MRUK compensates the tracking drift against our own anchor, that only works once it is localized
-    private void SetWorldLock(bool value)
+    // MRUK's world lock would move the OVRCameraRig/TrackingSpace every frame. That is meant for keeping
+    // loaded room anchors aligned - this project loads none, and a moving tracking space adds a
+    // time varying error to every AprilTag pose, because those come from an earlier capture timestamp.
+    private void DisableMrukWorldLock()
     {
         if (MRUK.Instance == null)
         {
-            if (value)
-                Debug.LogWarning("[WorldLockAnchor] No MRUK instance, world lock stays off.");
-
+            Debug.LogWarning("[WorldLockAnchor] No MRUK instance found, cannot verify that world lock is off.");
             return;
         }
 
-        MRUK.Instance.SetCustomWorldLockAnchor(value ? currentAnchor : null, Pose.identity);
-        MRUK.Instance.EnableWorldLock = value;
+        MRUK.Instance.SetCustomWorldLockAnchor(null, Pose.identity);
+        MRUK.Instance.EnableWorldLock = false;
     }
 }
