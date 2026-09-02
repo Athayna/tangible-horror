@@ -9,8 +9,8 @@ using UnityEngine.UI;
 /// </summary>
 public class WinScreen : MonoBehaviour
 {
-    [SerializeField, TextArea] private string message = "You did it!\n\nThank you for participating in our study.";
-    [SerializeField] private float distance = 1.2f;
+    [SerializeField, TextArea] private string message = "You escaped!\n\nThank you for participating in our study.";
+    [SerializeField] private float distance = 0.5f;
     [SerializeField] private float fadeDuration = 1.5f;
     [SerializeField] private float followSpeed = 2f;
     [SerializeField] private Color panelColor = new Color(0f, 0f, 0f, 0.85f);

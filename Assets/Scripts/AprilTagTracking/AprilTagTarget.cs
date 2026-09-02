@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Oculus.Interaction;
 using Oculus.Interaction.HandGrab;
+using Oculus.Interaction.Input;
 using UnityEngine;
 
 namespace TangibleHorror.AprilTagTracking
@@ -41,7 +42,32 @@ namespace TangibleHorror.AprilTagTracking
             /// at all times so a grab can already be running when the marker disappears; the remaining gap
             /// between the marker pose and the grab pose is decayed over Reacquire Blend Seconds.
             /// </summary>
-            HandOverToGrab
+            HandOverToGrab,
+
+            /// <summary>
+            /// Keep the offset to whichever hand was closest when the marker was lost, and follow that hand.
+            /// Falls back to freezing when no hand was near.
+            ///
+            /// Built for the case where the prop is held in an unknown grip: the Interaction SDK only selects
+            /// on a recognised grab gesture, and fingers behind the prop are regularly tracked as too far
+            /// away for that. The wrist pose survives finger occlusion, so following it keeps the virtual
+            /// prop within a few centimeters of the real one without needing any gesture at all. A grab that
+            /// IS recognised still wins, because it also tracks the fingers.
+            /// </summary>
+            FollowNearestHand,
+
+            /// <summary>
+            /// When the marker is lost, hand the prop to the Interaction SDK by FORCING the grab on
+            /// whichever hand is touching it. From that moment on everything is Meta's own, tested grab:
+            /// rotation, passing it from hand to hand, releasing, throwing.
+            ///
+            /// This is the clean answer to the problem the other modes only work around. Their weakness is
+            /// that they SIMULATE being held - they follow a joint, so the prop never really belongs to the
+            /// hand and every switch has to be papered over. HandGrabInteractor.ForceSelect makes the grab
+            /// real instead, and ForceSelect also overrides the unselect condition, so a finger dropping
+            /// out of tracking can no longer cancel it - which was the root cause all along.
+            /// </summary>
+            ForceGrabOnLoss
         }
 
         /// <summary>Who currently owns the transform.</summary>
@@ -127,10 +153,49 @@ namespace TangibleHorror.AprilTagTracking
         [Tooltip("Seconds without any detection before the object counts as lost.")]
         [SerializeField] private float lostAfterSeconds = 0.35f;
 
+        [Tooltip("USE HandOverToGrab. Marker visible: the marker drives. Marker lost: the prop stays exactly " +
+                 "where it was last seen, kinematic, no gravity, and it never moves on its own. Grabbed: the " +
+                 "Interaction SDK drives it, and releasing it lets it fall.\n\n" +
+                 "FollowNearestHand and ForceGrabOnLoss MOVE the prop by themselves when a hand comes near - " +
+                 "they were built to keep a held prop with the hand while the marker is occluded, but they " +
+                 "guess, and a wrong guess puts the prop somewhere the real one is not.")]
         [SerializeField] private LostBehaviour whenLost = LostBehaviour.FreezeInPlace;
 
         [Tooltip("Only used by FollowFallbackTransform - e.g. a hand anchor of the camera rig.")]
         [SerializeField] private Transform fallbackFollow;
+
+        [Tooltip("Only used by FollowNearestHand: the tracked hands, as Interaction SDK IHand sources. Auto " +
+                 "found in the scene if left empty. NOT the camera rig's hand anchors - those are driven by " +
+                 "OVRManager's node queries, which return nothing in this OpenXR project, so they sit frozen " +
+                 "on the tracking origin. IHand.GetRootPose is what the Interaction SDK itself uses.")]
+        [SerializeField, Interface(typeof(IHand))]
+        private List<UnityEngine.Object> hands = new List<UnityEngine.Object>();
+
+        [Tooltip("Only used by FollowNearestHand: how close the nearest FINGERTIP (or the wrist) has to be " +
+                 "to the prop at the moment the marker is lost to count as holding it, in centimeters. This " +
+                 "is a real contact test, so it can be tight - 4 to 6 cm. No joint within range means nobody " +
+                 "is holding the prop, and it freezes in place instead.")]
+        [SerializeField] private float handAttachDistanceCentimeters = 6f;
+
+        [Tooltip("Downward speed in m/s at the moment the marker is lost above which the prop counts as " +
+                 "FALLING and goes straight to physics instead of following a hand. Without this a dropped " +
+                 "prop would stick to the hand that just released it while the real one hits the floor.")]
+        [SerializeField] private float fallDetectSpeed = 0.4f;
+
+        [Tooltip("Only used by FollowNearestHand: re-checks every frame which hand joint is closest, so a " +
+                 "prop passed from one hand to the other follows along even while the marker stays hidden. " +
+                 "Costs one joint query per finger per hand - a few dozen per frame.")]
+        [SerializeField] private bool followNearestHandContinuously = true;
+
+        [Tooltip("How long the OTHER hand has to touch the prop before it takes it over, in seconds. " +
+                 "Stops a hand that only brushes past from stealing the prop, and stops the two hands from " +
+                 "trading it back and forth.")]
+        [SerializeField] private float handSwitchDwellSeconds = 0.2f;
+
+        [Tooltip("Only used by FollowNearestHand: after following a hand for this long without the marker " +
+                 "coming back, hand the prop to physics anyway, so it cannot stay stuck to a hand that is " +
+                 "not actually holding it. 0 follows indefinitely.")]
+        [SerializeField] private float followHandTimeoutSeconds = 2f;
 
         [Header("Grab handover (When Lost = HandOverToGrab)")]
         [Tooltip("Consecutive detections needed before the marker takes the object back. Prevents the " +
@@ -146,6 +211,27 @@ namespace TangibleHorror.AprilTagTracking
                  "holds it, and the hand only takes over when the marker is lost - the physical marker is " +
                  "the more accurate source. On: touching the prop hands it to the hand until release.")]
         [SerializeField] private bool grabTakesPriority;
+
+        [Tooltip("Upper bound in m/s for the velocity handed to the Rigidbody when the marker is lost and " +
+                 "physics takes over. Keeps a prop that was moving moving, without letting a bad velocity " +
+                 "estimate launch it across the room.")]
+        [SerializeField] private float releaseSpeedLimit = 1.5f;
+
+        [Tooltip("Grace period after the marker is lost before the prop is handed to physics. It stays put " +
+                 "and kinematic until then, so a hand that is already holding the real prop gets time to " +
+                 "register as a grab instead of watching the virtual one drop. 0 releases immediately.")]
+        [SerializeField] private float releaseToPhysicsDelaySeconds = 0.6f;
+
+        [Tooltip("Shortest grab, in seconds, that counts as the participant deliberately holding the prop. " +
+                 "The Interaction SDK regularly selects and unselects again within a frame or two when the " +
+                 "fingers behind the prop drop out of tracking - reading that as a deliberate release is " +
+                 "what made the prop fall out of a hand that was still holding it. Anything shorter is " +
+                 "treated like a plain marker loss instead.")]
+        [SerializeField] private float minGrabSecondsForRelease = 0.25f;
+
+        [Tooltip("Logs every Select, Unselect and Cancel with the drive state it happened in. The way to see " +
+                 "whether the Interaction SDK ever registered the grab, or silently cancelled it again.")]
+        [SerializeField] private bool logGrabEvents;
 
         [Tooltip("Grab interactables of the prop. Kept ENABLED at all times - listed here only so a prefab " +
                  "that was saved with them switched off gets repaired on start. Auto-found if left empty.")]
@@ -201,6 +287,10 @@ namespace TangibleHorror.AprilTagTracking
 
         private Pose _measuredPose;
         private Pose _appliedPose;
+        // Stored relative to driven.parent, not in world space. The prop hangs under LocationRoot, and
+        // WorldLockAnchor reparents LocationRoot onto the spatial anchor - a world space rest pose would
+        // stay behind while the whole room moves. Relative to the parent it travels with the room.
+        private Pose _frozenLocal;
         private Pose _frozenPose;
         private Quaternion _filteredRotation = Quaternion.identity;
 
@@ -221,6 +311,35 @@ namespace TangibleHorror.AprilTagTracking
         private Vector3 _fallbackLocalPosition;
         private Quaternion _fallbackLocalRotation = Quaternion.identity;
 
+        /// <summary>What the prop follows while the marker is gone, chosen when tracking was lost.</summary>
+        private Transform _activeFollow;
+        private HandGrabInteractable _handGrabInteractable;
+        private HandGrabInteractor[] _interactors;
+        private HandGrabInteractor _forcedInteractor;
+        private float _lastForceAttempt = float.NegativeInfinity;
+        private float _lastInteractorSearch = float.NegativeInfinity;
+        private bool _forceGrabWorked;
+        private IHand _activeHand;
+        private IHand _candidateHand;
+        private HandJointId _candidateJoint = HandJointId.HandWristRoot;
+        private Pose _candidatePose;
+        private float _candidateSince;
+        private HandJointId _activeJoint = HandJointId.HandWristRoot;
+
+        // Fingertips first, wrist last: the tips are what actually touch the prop, so the offset to them is
+        // short and stays valid. The wrist is only the fallback for a prop resting against the palm.
+        private static readonly HandJointId[] AttachJoints =
+        {
+            HandJointId.HandThumbTip,
+            HandJointId.HandIndexTip,
+            HandJointId.HandMiddleTip,
+            HandJointId.HandRingTip,
+            HandJointId.HandPinkyTip,
+            HandJointId.HandWristRoot
+        };
+        private readonly List<IHand> _handCache = new List<IHand>();
+        private bool _handsResolved;
+
         private DriveState _state = DriveState.Frozen;
         private bool _stateInitialized;
         private int _selectCount;
@@ -234,6 +353,12 @@ namespace TangibleHorror.AprilTagTracking
         // two absolute poses, so the prop follows the hand one to one from the very first frame.
         private Vector3 _handoverPositionGap;
         private Quaternion _handoverRotationGap = Quaternion.identity;
+
+        private float _grabStartTime = float.NegativeInfinity;
+        private float _frozenSince = float.NegativeInfinity;
+        private bool _releasedToPhysics;
+        private bool _physicsReleaseAllowed;
+        private float _physicsReleaseDelay;
         private bool _originalIsKinematic;
         private IPointableElement _pointable;
 
@@ -266,6 +391,8 @@ namespace TangibleHorror.AprilTagTracking
                 grabInteractables.AddRange(driven.GetComponentsInChildren<DistanceHandGrabInteractable>(true));
                 grabInteractables.AddRange(driven.GetComponentsInChildren<DistanceGrabInteractable>(true));
             }
+
+            _handGrabInteractable = driven.GetComponentInChildren<HandGrabInteractable>(true);
 
             ForceGrabInteractablesEnabled();
 
@@ -305,12 +432,26 @@ namespace TangibleHorror.AprilTagTracking
             switch (pointerEvent.Type)
             {
                 case PointerEventType.Select:
+                    if (_selectCount == 0)
+                    {
+                        _grabStartTime = Time.time;
+                    }
+
                     _selectCount++;
                     break;
                 case PointerEventType.Unselect:
                 case PointerEventType.Cancel:
                     _selectCount = Mathf.Max(0, _selectCount - 1);
                     break;
+                default:
+                    return;
+            }
+
+            if (logGrabEvents)
+            {
+                Debug.Log($"AprilTagTarget {name}: {pointerEvent.Type} in state {_state}, " +
+                          $"select count now {_selectCount}, grab lasted " +
+                          $"{(Time.time - _grabStartTime) * 1000f:F0} ms.", this);
             }
         }
 
@@ -458,10 +599,42 @@ namespace TangibleHorror.AprilTagTracking
                 EnterState(desired, isTransition);
             }
 
-            if (_state == DriveState.Grabbed)
+            // The grace period runs out here rather than in EnterState, because it ends on a timer and not
+            // on a state change.
+            if (WaitingForPhysicsRelease && Time.time - _frozenSince >= _physicsReleaseDelay)
             {
-                ApplyGrabbedPose(deltaTime);
+                _releasedToPhysics = true;
+                ApplyKinematic(false);
+                SeedReleaseVelocity();
+            }
+
+            // Grabbed: the Interaction SDK owns the transform. Frozen under HandOverToGrab: the physics
+            // engine owns it - the prop is a normal dynamic body again and falls, rolls and collides. Both
+            // cases are the same job for us: read, do not write, and stay ready to take it back.
+            if (_state == DriveState.Grabbed || PhysicsOwnsTransform)
+            {
+                FollowExternalPose(deltaTime);
                 return;
+            }
+
+            if (_state == DriveState.Frozen && whenLost == LostBehaviour.FollowNearestHand
+                && followNearestHandContinuously)
+            {
+                MaybeReattachHandJoint();
+            }
+            else if (_state == DriveState.Frozen && whenLost == LostBehaviour.ForceGrabOnLoss)
+            {
+                // Force grab first - a real Interaction SDK grab is always better than following a joint,
+                // because rotation, passing and releasing are then Meta's own logic. But if it cannot be
+                // handed over - no interactor found yet, or none in contact - the prop still has to stay
+                // with the hand rather than hang in the air, so the joint follow runs as the fallback.
+                _forceGrabWorked = false;
+                TryForceGrab();
+
+                if (!_forceGrabWorked)
+                {
+                    MaybeReattachHandJoint();
+                }
             }
 
             Pose goal = _state == DriveState.MarkerDriven ? _measuredPose : ResolveFrozenGoal();
@@ -487,6 +660,12 @@ namespace TangibleHorror.AprilTagTracking
                 rotation = Quaternion.Slerp(_blendStartPose.rotation, rotation, blend);
             }
 
+            // Asserted EVERY frame, not just on a state change. Grabbable sets isKinematic back to false
+            // and applies a throw velocity whenever it unselects, and an unselect can happen in the
+            // middle of a state - the prop then stayed dynamic while we kept writing its transform, and
+            // gravity fighting our writes is exactly the wild up and down glitching.
+            ApplyKinematic(true);
+
             _appliedPose = new Pose(position, rotation);
             driven.SetPositionAndRotation(position, rotation);
 
@@ -494,10 +673,28 @@ namespace TangibleHorror.AprilTagTracking
         }
 
         /// <summary>
-        /// The Interaction SDK owns the pose. It has already written it this frame, so all that is left is
-        /// to fade out whatever gap the handover left and to keep the filters in sync for the way back.
+        /// True while the prop is a plain dynamic body: no marker, no hand, HandOverToGrab selected, and the
+        /// grace period expired. Until then it stays pinned and kinematic, which is what stops it dropping
+        /// out of a hand that is holding the real prop but has not been registered as a grab yet.
         /// </summary>
-        private void ApplyGrabbedPose(float deltaTime)
+        private bool PhysicsOwnsTransform =>
+            _state == DriveState.Frozen && _releasedToPhysics;
+
+        /// <summary>Distance a joint has to be inside to TAKE the prop.</summary>
+        private float AttachLimit => Mathf.Max(0f, handAttachDistanceCentimeters) * 0.01f;
+
+        /// <summary>Wider than the attach limit, so an attached prop is not dropped by a little noise.</summary>
+        private float KeepLimit => AttachLimit * 2f;
+
+        private bool WaitingForPhysicsRelease =>
+            _state == DriveState.Frozen && _physicsReleaseAllowed && !_releasedToPhysics;
+
+        /// <summary>
+        /// Someone else owns the pose - the Interaction SDK or the physics engine. Both have already written
+        /// it this frame, so all that is left is to fade out whatever gap a handover left and to keep the
+        /// filters in sync for the way back to marker driving.
+        /// </summary>
+        private void FollowExternalPose(float deltaTime)
         {
             Pose wanted = new Pose(driven.position, driven.rotation);
 
@@ -520,11 +717,27 @@ namespace TangibleHorror.AprilTagTracking
             SetRenderersVisible(true);
         }
 
+        /// <summary>Both modes let a recognised grab take the prop over; they differ in what Frozen means.</summary>
+        private bool GrabCanTakeOver =>
+            whenLost == LostBehaviour.HandOverToGrab
+            || whenLost == LostBehaviour.FollowNearestHand
+            || whenLost == LostBehaviour.ForceGrabOnLoss;
+
         private DriveState ResolveState(bool markerFresh, bool grabbed)
         {
-            if (whenLost != LostBehaviour.HandOverToGrab)
+            if (!GrabCanTakeOver)
             {
                 return markerFresh ? DriveState.MarkerDriven : DriveState.Frozen;
+            }
+
+            // A grab WE forced has no hysteresis on the way back. The marker is unambiguously the better
+            // source, and the grab only exists because we asked for it, so the first fresh detection takes
+            // the prop back. Requiring several detections here is what left it glued to the hand for 19
+            // seconds: every Frozen/Grabbed transition resets the counter, and with the unselect condition
+            // overridden the marker is the only way out at all.
+            if (_forcedInteractor != null && markerFresh)
+            {
+                return DriveState.MarkerDriven;
             }
 
             if (grabbed && grabTakesPriority)
@@ -549,11 +762,14 @@ namespace TangibleHorror.AprilTagTracking
 
         private void EnterState(DriveState next, bool isTransition)
         {
+            DriveState previous = _state;
             _state = next;
 
             switch (next)
             {
                 case DriveState.MarkerDriven:
+                    // The marker is the more accurate source, so it takes the prop back off the hand.
+                    ReleaseForcedGrab();
                     _blendStartPose = _appliedPose;
                     _blendTimer = 0f;
                     _positionFilter.Reset(_appliedPose.position);
@@ -563,10 +779,47 @@ namespace TangibleHorror.AprilTagTracking
 
                 case DriveState.Frozen:
                     _frozenPose = _appliedPose;
+                    _frozenLocal = ToLocal(_appliedPose);
                     _pendingDetections = 0;
                     LastObservedMarkerCount = 0;
-                    CaptureFallbackOffset();
+
+                    // Where the prop lands depends on WHY it got here, and the two cases want opposite
+                    // things. Marker lost: the real prop is probably still in a hand, so follow that hand and
+                    // never drop it - a dropped prop is the largest error there is. Grab released: the
+                    // participant let go on purpose, so a purely virtual prop has to fall like any object,
+                    // and it must not stick back onto the hand that just released it.
+                    // A grab that lasted only a frame or two is Interaction SDK noise, not a decision.
+                    // Treating it as a release is what dropped the prop out of a hand that still held it.
+                    bool releasedByHand = previous == DriveState.Grabbed
+                                          && Time.time - _grabStartTime >= Mathf.Max(0f, minGrabSecondsForRelease);
+
+                    if (logGrabEvents && previous == DriveState.Grabbed && !releasedByHand)
+                    {
+                        Debug.Log($"AprilTagTarget {name}: grab lasted only " +
+                                  $"{(Time.time - _grabStartTime) * 1000f:F0} ms, treating it as tracking " +
+                                  $"noise rather than a release.", this);
+                    }
+
+
+                    // The marker's own last velocity separates "still in a hand" from "already falling".
+                    // A dropped prop must fall in VR too, otherwise the participant cannot find the real one
+                    // again without looking at the floor.
+                    // 0 disables it: a marker lost during a fast downward hand move would otherwise be
+                    // mistaken for a drop, and then the prop leaves the place it was last seen.
+                    bool wasFalling = fallDetectSpeed > 0f
+                                      && _positionFilter.Velocity.y <= -fallDetectSpeed;
+
+                    CaptureFallbackOffset(attachToHand: !releasedByHand && !wasFalling);
+                    ConfigurePhysicsRelease(releasedByHand || wasFalling);
+
+                    _frozenSince = Time.time;
+                    _releasedToPhysics = false;
                     ApplyKinematic(true);
+
+                    // Physics later continues exactly where the marker left off, so there is no gap to fade.
+                    _handoverPositionGap = Vector3.zero;
+                    _handoverRotationGap = Quaternion.identity;
+                    _blendTimer = 0f;
                     break;
 
                 case DriveState.Grabbed:
@@ -602,6 +855,22 @@ namespace TangibleHorror.AprilTagTracking
             }
         }
 
+        /// <summary>
+        /// Hands the marker's last measured velocity to the Rigidbody when physics takes over, so a prop
+        /// that was moving keeps moving instead of dropping straight down. Clamped, because a marker that
+        /// vanishes during a fast move can leave a wild velocity estimate behind.
+        /// </summary>
+        private void SeedReleaseVelocity()
+        {
+            if (!_useRigidbody || _rigidbody.isKinematic)
+            {
+                return;
+            }
+
+            _rigidbody.linearVelocity = Vector3.ClampMagnitude(_positionFilter.Velocity, releaseSpeedLimit);
+            _rigidbody.angularVelocity = Vector3.zero;
+        }
+
         private void ApplyKinematic(bool kinematic)
         {
             if (!_useRigidbody)
@@ -609,7 +878,21 @@ namespace TangibleHorror.AprilTagTracking
                 return;
             }
 
-            _rigidbody.isKinematic = kinematic || _originalIsKinematic;
+            bool wanted = kinematic || _originalIsKinematic;
+            if (_rigidbody.isKinematic == wanted)
+            {
+                return;
+            }
+
+            if (wanted)
+            {
+                // Drop whatever Grabbable threw at it, otherwise the velocity is still there the next
+                // time the prop becomes dynamic.
+                _rigidbody.linearVelocity = Vector3.zero;
+                _rigidbody.angularVelocity = Vector3.zero;
+            }
+
+            _rigidbody.isKinematic = wanted;
         }
 
         /// <summary>
@@ -631,25 +914,534 @@ namespace TangibleHorror.AprilTagTracking
 
         private Pose ResolveFrozenGoal()
         {
-            if (whenLost == LostBehaviour.FollowFallbackTransform && fallbackFollow != null)
+            if (_activeHand != null && _activeHand.GetJointPose(_activeJoint, out Pose joint))
             {
                 return new Pose(
-                    fallbackFollow.position + fallbackFollow.rotation * _fallbackLocalPosition,
-                    fallbackFollow.rotation * _fallbackLocalRotation);
+                    joint.position + joint.rotation * _fallbackLocalPosition,
+                    joint.rotation * _fallbackLocalRotation);
             }
 
-            return _frozenPose;
+            if (_activeFollow != null)
+            {
+                return new Pose(
+                    _activeFollow.position + _activeFollow.rotation * _fallbackLocalPosition,
+                    _activeFollow.rotation * _fallbackLocalRotation);
+            }
+
+            return FromLocal(_frozenLocal);
         }
 
-        private void CaptureFallbackOffset()
+        /// <summary>
+        /// Converts a world pose into the parent space, so it survives the parent being moved or
+        /// reparented - which is exactly what loading a spatial anchor does to the whole room.
+        /// </summary>
+        private Pose ToLocal(Pose world)
         {
-            if (fallbackFollow == null)
+            Transform parent = driven != null ? driven.parent : null;
+            if (parent == null)
+            {
+                return world;
+            }
+
+            return new Pose(
+                parent.InverseTransformPoint(world.position),
+                Quaternion.Inverse(parent.rotation) * world.rotation);
+        }
+
+        private Pose FromLocal(Pose local)
+        {
+            Transform parent = driven != null ? driven.parent : null;
+            if (parent == null)
+            {
+                return local;
+            }
+
+            return new Pose(
+                parent.TransformPoint(local.position),
+                parent.rotation * local.rotation);
+        }
+
+        /// <summary>
+        /// Decides what the prop follows while the marker is gone, and remembers the offset it had at that
+        /// moment. FollowNearestHand picks the closer of the hand anchors, but only if one is actually within
+        /// reach - otherwise nobody is holding the prop and freezing in place is the smaller error.
+        /// </summary>
+        private void CaptureFallbackOffset(bool attachToHand)
+        {
+            _activeFollow = null;
+            _activeHand = null;
+            Pose reference = default;
+            bool haveReference = false;
+
+            if (whenLost == LostBehaviour.FollowFallbackTransform && fallbackFollow != null)
+            {
+                _activeFollow = fallbackFollow;
+                reference = new Pose(fallbackFollow.position, fallbackFollow.rotation);
+                haveReference = true;
+            }
+            else if (whenLost == LostBehaviour.FollowNearestHand && attachToHand)
+            {
+                haveReference = FindNearestHandJoint(out _activeHand, out _activeJoint, out reference,
+                    AttachLimit, true);
+            }
+
+            if (!haveReference)
             {
                 return;
             }
 
-            _fallbackLocalPosition = Quaternion.Inverse(fallbackFollow.rotation) * (_appliedPose.position - fallbackFollow.position);
-            _fallbackLocalRotation = Quaternion.Inverse(fallbackFollow.rotation) * _appliedPose.rotation;
+            _fallbackLocalPosition = Quaternion.Inverse(reference.rotation) * (_appliedPose.position - reference.position);
+            _fallbackLocalRotation = Quaternion.Inverse(reference.rotation) * _appliedPose.rotation;
+        }
+
+        /// <summary>
+        /// Whether and when the prop may become a dynamic body while frozen.
+        /// </summary>
+        private void ConfigurePhysicsRelease(bool dropImmediately)
+        {
+            switch (whenLost)
+            {
+                case LostBehaviour.HandOverToGrab:
+                    // Losing the marker must NEVER drop the prop - it stays exactly where it was last
+                    // seen. Physics is only for the one case the participant caused on purpose: a real
+                    // grab that was released (or, if enabled, a fall the marker actually measured).
+                    // Release To Physics Delay Seconds is therefore unused in this mode.
+                    _physicsReleaseAllowed = dropImmediately;
+                    _physicsReleaseDelay = 0f;
+                    break;
+
+                case LostBehaviour.FollowNearestHand when dropImmediately:
+                    _physicsReleaseAllowed = true;
+                    _physicsReleaseDelay = 0f;
+                    break;
+
+                case LostBehaviour.FollowNearestHand when _activeHand != null:
+                    // Following a hand: drop only after the timeout, so a prop cannot stay stuck to a hand
+                    // that is not really holding it. 0 means follow indefinitely.
+                    _physicsReleaseAllowed = followHandTimeoutSeconds > 0f;
+                    _physicsReleaseDelay = followHandTimeoutSeconds;
+                    break;
+
+                default:
+                    // No hand nearby, or a lost behaviour that pins the prop on purpose: stay put. Freezing
+                    // in place is a bounded error, dropping from an unknown pose is not.
+                    _physicsReleaseAllowed = false;
+                    _physicsReleaseDelay = 0f;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// The scene carries a dozen IHand implementations for two physical hands - data sources, filters,
+        /// synthetic hands and references, all chained. They report the same pose, so keeping them all just
+        /// multiplies the work and makes the log unreadable. One per handedness is enough.
+        /// </summary>
+        private void DedupeHandsByHandedness()
+        {
+            var kept = new Dictionary<Handedness, IHand>();
+
+            foreach (IHand hand in _handCache)
+            {
+                try
+                {
+                    Handedness handedness = hand.Handedness;
+                    if (!kept.TryGetValue(handedness, out IHand current) ||
+                        SourceRank(hand) < SourceRank(current))
+                    {
+                        kept[handedness] = hand;
+                    }
+                }
+                catch (Exception)
+                {
+                    // A wrapper whose reference is not resolved yet. Skip it, the chain has others.
+                }
+            }
+
+            if (kept.Count > 0)
+            {
+                _handCache.Clear();
+                _handCache.AddRange(kept.Values);
+            }
+        }
+
+        /// <summary>
+        /// Lower is better. Both hands must come from the same KIND of source, otherwise their poses are not
+        /// comparable and the nearest-hand decision is biased - the log showed exactly that, one hand read
+        /// from an interactor reference and the other from a synthetic hand. The raw data source is preferred
+        /// because a SyntheticHand is deliberately modified to snap onto grab poses.
+        /// </summary>
+        private static int SourceRank(IHand hand)
+        {
+            string type = hand.GetType().Name;
+
+            if (type.Contains("DataSource"))
+            {
+                return 0;
+            }
+
+            if (type.Contains("Synthetic") || type.Contains("Ref"))
+            {
+                return 2;
+            }
+
+            return 1;
+        }
+
+        /// <summary>
+        /// Re-decides every frame which joint carries the prop. That is what makes passing it from one hand
+        /// to the other work while the marker stays hidden, and it also lets a hand pick up a prop that was
+        /// already frozen. The offset is re-captured from where the prop currently is, so a switch cannot
+        /// produce a jump - only what it is attached to changes.
+        ///
+        /// Two thresholds keep it steady: a joint has to come inside the attach limit to take the prop, and
+        /// it keeps it until twice that distance. A rival joint has to be closer by the switch margin.
+        /// </summary>
+        /// <summary>
+        /// Hands the prop to the Interaction SDK as a real grab. Picks the hand whose nearest fingertip is
+        /// actually touching, then forces that interactor to select our interactable.
+        ///
+        /// allowManualRelease stays false on purpose: that makes ForceSelect override the unselect
+        /// condition as well, so the grab survives the finger tracking dropouts that used to cancel it
+        /// after 40 ms. We give it back ourselves - when the marker returns, or when no fingertip is in
+        /// contact any more.
+        /// </summary>
+        private void TryForceGrab()
+        {
+            if (_handGrabInteractable == null)
+            {
+                return;
+            }
+
+            // Retrying every frame would spam ForceSelect while a hand hovers just out of reach.
+            if (Time.time - _lastForceAttempt < 0.1f)
+            {
+                return;
+            }
+
+            _lastForceAttempt = Time.time;
+            EnsureInteractors();
+
+            if (_interactors == null || _interactors.Length == 0)
+            {
+                return;
+            }
+
+            HandGrabInteractor best = null;
+            float bestDistance = AttachLimit;
+            HandJointId bestJoint = HandJointId.HandWristRoot;
+
+            foreach (HandGrabInteractor interactor in _interactors)
+            {
+                if (interactor == null || !interactor.enabled)
+                {
+                    continue;
+                }
+
+                IHand hand = interactor.Hand;
+                if (hand == null || !hand.IsTrackedDataValid)
+                {
+                    continue;
+                }
+
+                foreach (HandJointId joint in AttachJoints)
+                {
+                    if (!hand.GetJointPose(joint, out Pose pose))
+                    {
+                        continue;
+                    }
+
+                    float distance = Vector3.Distance(pose.position, _appliedPose.position);
+                    if (distance < bestDistance)
+                    {
+                        bestDistance = distance;
+                        best = interactor;
+                        bestJoint = joint;
+                    }
+                }
+            }
+
+            if (best == null)
+            {
+                // Nobody is touching it. Give any earlier forced grab back so a released prop can fall.
+                ReleaseForcedGrab();
+                return;
+            }
+
+            _forceGrabWorked = true;
+
+            if (best == _forcedInteractor)
+            {
+                // Already forced on this hand. ISDK may have cancelled it, so force it again - that is the
+                // self healing part, and it costs one call every 100 ms at most.
+                best.ForceSelect(_handGrabInteractable);
+                return;
+            }
+
+            ReleaseForcedGrab();
+
+            Log("forcing a grab on " + DescribeHand(best.Hand) + " " + bestJoint + " at " +
+                (bestDistance * 100f).ToString("F1") + " cm");
+
+            best.ForceSelect(_handGrabInteractable);
+            _forcedInteractor = best;
+        }
+
+        private void ReleaseForcedGrab()
+        {
+            if (_forcedInteractor == null)
+            {
+                return;
+            }
+
+            Log("releasing the forced grab on " + DescribeHand(_forcedInteractor.Hand));
+            _forcedInteractor.ForceRelease();
+            _forcedInteractor = null;
+        }
+
+        /// <summary>
+        /// Looks for the hand grab interactors, and does NOT cache an empty result. The Interaction SDK
+        /// builds its hand rig during startup, and over Link that takes a moment - the first search ran
+        /// before the interactors existed, cached zero of them and never looked again.
+        /// </summary>
+        private void EnsureInteractors()
+        {
+            if (_interactors != null && _interactors.Length > 0)
+            {
+                return;
+            }
+
+            if (Time.time - _lastInteractorSearch < 0.5f)
+            {
+                return;
+            }
+
+            _lastInteractorSearch = Time.time;
+
+            // Include inactive: the SDK parks interactors under interactor groups that drive them
+            // directly, and their GameObjects are not necessarily active in the usual sense.
+            HandGrabInteractor[] found = FindObjectsByType<HandGrabInteractor>(
+                FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+            if (found.Length == 0)
+            {
+                return;
+            }
+
+            _interactors = found;
+            Debug.Log("[AprilTagTarget] " + name + ": found " + _interactors.Length +
+                      " HandGrabInteractor(s) for ForceGrabOnLoss.", this);
+        }
+
+        private void MaybeReattachHandJoint()
+        {
+            bool found = FindNearestHandJoint(out IHand hand, out HandJointId joint, out Pose pose,
+                AttachLimit, false);
+
+            // Nothing touching, or the hand that already carries it is still the nearest: leave it alone.
+            // Switching joints WITHIN one hand is never useful - every switch re-anchors the offset, and
+            // re-anchoring cancels the hand's own motion. With five fingertips all 2 to 5 cm from a coin
+            // in a palm grip that happened every frame, which is why a rotating palm left the prop
+            // standing still.
+            if (!found || hand == _activeHand)
+            {
+                _candidateHand = null;
+                return;
+            }
+
+            // A forced grab is pending: do not fight it by also dragging the prop along a joint.
+            if (_forcedInteractor != null)
+            {
+                return;
+            }
+
+            // A different hand is touching. It has to keep touching for a moment before it gets the prop,
+            // otherwise a hand brushing past picks it up.
+            if (hand != _candidateHand)
+            {
+                _candidateHand = hand;
+                _candidateJoint = joint;
+                _candidatePose = pose;
+                _candidateSince = Time.time;
+                return;
+            }
+
+            _candidateJoint = joint;
+            _candidatePose = pose;
+
+            if (Time.time - _candidateSince < Mathf.Max(0f, handSwitchDwellSeconds))
+            {
+                return;
+            }
+
+            Log((_activeHand == null ? "picked up by " : "handed over to ") +
+                DescribeHand(_candidateHand) + " " + _candidateJoint);
+
+            _activeHand = _candidateHand;
+            _activeJoint = _candidateJoint;
+            _candidateHand = null;
+
+            // Re-captured from the CURRENT pose, which is what makes the switch invisible.
+            _fallbackLocalPosition = Quaternion.Inverse(_candidatePose.rotation) *
+                                     (_appliedPose.position - _candidatePose.position);
+            _fallbackLocalRotation = Quaternion.Inverse(_candidatePose.rotation) * _appliedPose.rotation;
+        }
+
+        private void Log(string message)
+        {
+            if (logGrabEvents)
+            {
+                Debug.Log("AprilTagTarget " + name + ": " + message, this);
+            }
+        }
+
+        /// <summary>
+        /// Finds the hand JOINT closest to the prop, not the wrist. The wrist sits 10 to 15 cm from a held
+        /// prop, and an offset that long turns every wrist rotation into a wide arc - which is exactly the
+        /// "I rotate my hand and the prop swings away from it" failure. A fingertip is 2 to 3 cm away, so the
+        /// lever arm nearly vanishes and the offset stays valid far longer. It also turns the distance test
+        /// into a genuine contact test, which is what makes a tight threshold safe.
+        /// </summary>
+        private bool FindNearestHandJoint(out IHand nearestHand, out HandJointId nearestJoint,
+            out Pose nearestPose, float limit, bool logResult)
+        {
+            EnsureHands();
+
+            nearestHand = null;
+            nearestJoint = HandJointId.HandWristRoot;
+            nearestPose = default;
+            float nearestDistance = float.PositiveInfinity;
+            string report = string.Empty;
+
+            foreach (IHand hand in _handCache)
+            {
+                if (hand == null || !hand.IsTrackedDataValid)
+                {
+                    report += "  |  " + DescribeHand(hand) + ": no valid tracking";
+                    continue;
+                }
+
+                HandJointId bestJoint = HandJointId.HandWristRoot;
+                Pose bestPose = default;
+                float bestDistance = float.PositiveInfinity;
+
+                foreach (HandJointId joint in AttachJoints)
+                {
+                    if (!hand.GetJointPose(joint, out Pose pose))
+                    {
+                        continue;
+                    }
+
+                    float distance = Vector3.Distance(pose.position, _appliedPose.position);
+                    if (distance < bestDistance)
+                    {
+                        bestDistance = distance;
+                        bestJoint = joint;
+                        bestPose = pose;
+                    }
+                }
+
+                if (float.IsPositiveInfinity(bestDistance))
+                {
+                    report += "  |  " + DescribeHand(hand) + ": no joints";
+                    continue;
+                }
+
+                report += "  |  " + DescribeHand(hand) + " " + bestJoint + ": " +
+                          (bestDistance * 100f).ToString("F1") + " cm";
+
+                if (bestDistance <= limit && bestDistance < nearestDistance)
+                {
+                    nearestDistance = bestDistance;
+                    nearestHand = hand;
+                    nearestJoint = bestJoint;
+                    nearestPose = bestPose;
+                }
+            }
+
+            if (logGrabEvents && logResult)
+            {
+                string outcome = nearestHand != null
+                    ? "attached to " + DescribeHand(nearestHand) + " " + nearestJoint
+                    : "none, freezing in place";
+                Debug.Log("AprilTagTarget " + name + ": joint search, limit " +
+                          (limit * 100f).ToString("F0") + " cm, " + _handCache.Count +
+                          " hand(s):" + report + "  ->  " + outcome, this);
+            }
+
+            return nearestHand != null;
+        }
+
+        private static string DescribeHand(IHand hand)
+        {
+            // Deliberately does not read Handedness: on a HandRef that throws until the reference it
+            // wraps has initialised itself, and this only ever feeds a log line.
+            if (hand == null)
+            {
+                return "null";
+            }
+
+            string owner = hand.GetType().Name;
+
+            try
+            {
+                return $"{hand.Handedness} ({owner})";
+            }
+            catch (Exception)
+            {
+                return owner;
+            }
+        }
+
+        /// <summary>
+        /// Collects the IHand sources. Explicitly NOT OVRCameraRig.leftHandAnchor / rightHandAnchor: those
+        /// are written by OVRCameraRig.UpdateAnchors from OVRPlugin node queries, and in this project those
+        /// deliver nothing - the measured proof is that centerEyeAnchor sat exactly on the tracking origin
+        /// with identity rotation while the headset was clearly tracked. Following them means following a
+        /// transform that never moves, which is why the prop only ever froze in place.
+        /// </summary>
+        private void EnsureHands()
+        {
+            if (_handsResolved)
+            {
+                return;
+            }
+
+            _handsResolved = true;
+            _handCache.Clear();
+
+            foreach (UnityEngine.Object candidate in hands)
+            {
+                if (candidate is IHand assigned)
+                {
+                    _handCache.Add(assigned);
+                }
+            }
+
+            if (_handCache.Count > 0)
+            {
+                return;
+            }
+
+            foreach (MonoBehaviour behaviour in FindObjectsByType<MonoBehaviour>(
+                         FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+            {
+                if (behaviour is IHand found && !_handCache.Contains(found))
+                {
+                    _handCache.Add(found);
+                }
+            }
+
+            DedupeHandsByHandedness();
+
+            if (_handCache.Count == 0)
+            {
+                Debug.LogWarning($"[AprilTagTarget] {name}: FollowNearestHand found no IHand in the scene. " +
+                                 "Assign Hands manually, otherwise the prop can only freeze in place.", this);
+                return;
+            }
+
+            Debug.Log($"[AprilTagTarget] {name}: using {_handCache.Count} auto-found hand source(s): " +
+                      string.Join(", ", _handCache.ConvertAll(DescribeHand)), this);
         }
 
         /// <summary>

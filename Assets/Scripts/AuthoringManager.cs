@@ -45,7 +45,8 @@ public class AuthoringManager : MonoBehaviour
         public List<LayoutEntry> entries = new();
     }
 
-    // One thing the buttons act on, everything that may only be moved keeps a null scale target
+    // One thing the buttons act on, the scale target only differs from the move target where
+    // props must not grow along
     private struct AuthoringTarget
     {
         public string label;
@@ -104,13 +105,19 @@ public class AuthoringManager : MonoBehaviour
             selectionLabel.text = targets[selection].label;
     }
 
-    // Only furniture carries a scale target, the LocationRoot and the props are move only
+    // Every target scales itself, only a furniture group hands the scaling to its mesh child so
+    // the props on top keep their own size
     private void BuildTargets()
     {
         targets.Clear();
 
         if (locationRoot != null)
-            targets.Add(new AuthoringTarget { label = "Transform Object", move = locationRoot });
+            targets.Add(new AuthoringTarget
+            {
+                label = "Transform Object",
+                move = locationRoot,
+                scaleTarget = locationRoot
+            });
 
         foreach (FurnitureGroup entry in furniture)
         {
@@ -125,7 +132,12 @@ public class AuthoringManager : MonoBehaviour
 
             foreach (Transform prop in entry.props)
                 if (prop != null)
-                    targets.Add(new AuthoringTarget { label = $"{entry.label} / {prop.name}", move = prop });
+                    targets.Add(new AuthoringTarget
+                    {
+                        label = $"{entry.label} / {prop.name}",
+                        move = prop,
+                        scaleTarget = prop
+                    });
         }
     }
 
@@ -174,7 +186,7 @@ public class AuthoringManager : MonoBehaviour
         AuthoringTarget selected = targets.Count > 0 ? targets[selection] : default;
         if (selected.scaleTarget == null)
         {
-            Debug.LogWarning("[Authoring] Only furniture can be scaled.");
+            Debug.LogWarning("[Authoring] The selected target has no scale target.");
             return;
         }
 
@@ -279,14 +291,18 @@ public class AuthoringManager : MonoBehaviour
 
         foreach (LayoutEntry entry in layout.entries)
         {
-            Transform authored = locationRoot.Find(entry.path);
+            bool isRoot = entry.path.Length == 0;
+            Transform authored = isRoot ? locationRoot : locationRoot.Find(entry.path);
             if (authored == null)
             {
                 Debug.LogWarning($"[Authoring] Layout entry '{entry.path}' does not exist anymore.");
                 continue;
             }
 
-            authored.SetLocalPositionAndRotation(entry.position, entry.rotation);
+            // the LocationRoot's pose comes from the anchor, only its scale is authored
+            if (!isRoot)
+                authored.SetLocalPositionAndRotation(entry.position, entry.rotation);
+
             authored.localScale = entry.scale;
         }
 
@@ -304,6 +320,8 @@ public class AuthoringManager : MonoBehaviour
 
     private IEnumerable<Transform> AuthoredTransforms()
     {
+        yield return locationRoot;
+
         foreach (FurnitureGroup entry in furniture)
         {
             if (entry.group != null)
@@ -321,6 +339,9 @@ public class AuthoringManager : MonoBehaviour
     // Hierarchy path below the root, unlike an instance id it survives a scene reload
     private static string PathFrom(Transform root, Transform target)
     {
+        if (target == root)
+            return string.Empty;
+
         string path = target.name;
         for (Transform parent = target.parent; parent != null && parent != root; parent = parent.parent)
             path = parent.name + "/" + path;

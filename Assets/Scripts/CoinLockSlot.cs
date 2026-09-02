@@ -73,8 +73,10 @@ public class CoinLockSlot : MonoBehaviour
             return;
         }
 
-        GameObject mesh = Instantiate(doubloonMesh);
-        mesh.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(0f, 0f, 90f));
+        // The 90 degree roll is relative to the slot, not to the world, so the coin keeps sitting
+        // flat in the lock no matter how the lock is rotated on the table.
+        GameObject mesh = Instantiate(doubloonMesh, transform.position, transform.rotation);
+        mesh.transform.localRotation = Quaternion.Euler(0, 0, 90);
         mesh.transform.localScale = Vector3.one * insertedMeshScale;
 
         // Parented afterwards and keeping the world pose: the mesh looks exactly as before, but now

@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2915063547642805669}
   - component: {fileID: 8311773657211941253}
+  - component: {fileID: 6826856949854861634}
+  - component: {fileID: 9108398001570369049}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -44,5 +46,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b69652ac00ef4cc459fa451d3115b67e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  coinLock: {fileID: 0}
+  requiredCoins: 4
   pipeCoin: {fileID: 0}
   bloodParent: {fileID: 0}
+  bloodSprayDuration: 5
+--- !u!114 &6826856949854861634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6953744227726857641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b0f599c3ac9433c83c2fc0b7b22088, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WinScreen
+  message: 'You escaped!
+
+
+    Thank you for participating in our study.'
+  distance: 0.5
+  fadeDuration: 1.5
+  followSpeed: 2
+  panelColor: {r: 0, g: 0, b: 0, a: 0.85}
+--- !u!114 &9108398001570369049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6953744227726857641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c73c02c8eb077945bc7570cca71a8e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::XRPerformanceSettings
+  applyFoveatedRendering: 1
+  foveatedRenderingLevel: 3
+  dynamicFoveatedRendering: 1
+  applyDisplayFrequency: 0
+  displayFrequency: 72
+  logResult: 1
