@@ -648,7 +648,8 @@ namespace TangibleHorror.AprilTagTracking
                     else
                     {
                         // The target ignores IDs it does not care about.
-                        target.OnMarkerObserved(observation.Id, pose, _detectionPass, LastPoseAgeSeconds);
+                        target.OnMarkerObserved(observation.Id, pose, _detectionPass, LastPoseAgeSeconds,
+                            observation.DecisionMargin, observation.PositionInCamera.magnitude);
                     }
                 }
             }
