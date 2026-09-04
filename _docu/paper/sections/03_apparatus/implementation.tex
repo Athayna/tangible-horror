@@ -1,0 +1,12 @@
+% !TeX root = ../../paper.tex
+
+\subsection{Implementation and Alignment}
+\label{sec:apparatus-implementation}
+
+The prototype runs standalone on a Meta Quest~3 and is built in Unity~6 with the Universal Render Pipeline, using the Meta XR SDK via OpenXR. The cabin interior, props, and creatures are assembled from asset store packs; custom scripts handle everything specific to the study.
+
+Getting a proxy illusion to hold comes down to alignment, and we use two mechanisms depending on whether an object moves. Static furniture and the proxy stations are aligned by hand during setup: the experimenter places the physical bowl, bucket, pipe outlet, and webbing in the room, adjusts the corresponding virtual objects to match, and pins the result with the Quest's spatial anchors so the calibration survives headset restarts and short tracking losses. A dedicated authoring mode supports this step, and a world-lock component keeps each virtual object fixed to its anchored real-world pose at runtime.
+
+The coins are the one thing the player carries around, so a static anchor is not enough. Physical coin props are tracked optically through the headset's passthrough cameras using AprilTag fiducial markers, with a One-Euro filter smoothing the raw poses. The virtual coin follows its physical twin, which lets a participant fish a coin out of the worm bucket, hold onto it, and slot it into the door lock, with the virtual and physical coin staying in register throughout.
+
+Scale mismatches are handled at the source: a sizing component scales each virtual object so that its rendered dimensions match the measured dimensions of its physical proxy in centimeters, either uniformly or per axis. This mattered more than expected---a virtual bowl a few centimeters wider than the real one is enough for the player's fingers to visibly clip through the rim on approach.

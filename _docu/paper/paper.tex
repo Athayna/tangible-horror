@@ -1,0 +1,64 @@
+% !TeX spellcheck = en_US
+
+% Master Project Paper: Tangible Horror
+% Alexandra R. Müller & Leonie F. E. Ferdinand
+% Hochschule RheinMain – University of Applied Sciences and Arts (HSRM)
+%
+% Build with ./build.sh (pdflatex + bibtex + 2x pdflatex).
+%
+% Document layout:
+%   chapters/   one file per top-level unit of the paper; each file carries
+%               only the \section heading and \input lines
+%   sections/   the actual text, one subfolder per chapter
+% To add content, create a file under sections/<chapter>/ and add a matching
+% \input line to the chapter file.
+
+\documentclass[sigconf,nonacm]{acmart}
+
+% Page numbers on (useful while drafting)
+\settopmatter{printfolios=true}
+
+% Draft marker for missing numbers and open decisions.
+% Remove all \todoin{...} before submission.
+\newcommand{\todoin}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+
+\begin{document}
+
+\title[Tangible Horror]{Tangible Horror: Passive Haptic Proxies in a Virtual Reality Horror Experience}
+
+\author{Alexandra R. Müller}
+\email{alexandra.mueller\_1@student.hs-rm.de}
+\affiliation{%
+  \institution{Hochschule RheinMain}
+  \city{Wiesbaden}
+  \country{Germany}
+}
+
+\author{Leonie F. E. Ferdinand}
+\email{leoniefranziskaelisabeth.ferdinand@student.hs-rm.de}
+\affiliation{%
+  \institution{Hochschule RheinMain}
+  \city{Wiesbaden}
+  \country{Germany}
+}
+
+\begin{abstract}
+  \input{chapters/00_abstract}
+\end{abstract}
+
+\keywords{virtual reality, passive haptics, presence, immersion, horror, tangible proxies, IPQ}
+
+\maketitle
+
+\input{chapters/01_introduction}
+\input{chapters/02_related_work}
+\input{chapters/03_apparatus}
+\input{chapters/04_study}
+\input{chapters/05_results}
+\input{chapters/06_discussion}
+\input{chapters/07_conclusion}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{bibliography}
+
+\end{document}
