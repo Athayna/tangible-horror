@@ -1,0 +1,13 @@
+participant,condition,G1,SP,INV,REAL
+P1,baseline,3.0,2.8,2.0,2.25
+P1,haptic,5.0,5.8,4.75,4.0
+P2,haptic,6.0,5.2,4.75,3.5
+P3,haptic,6.0,6.4,4.0,2.75
+P3,baseline,2.0,2.6,1.25,1.5
+P4,haptic,6.0,6.4,4.75,6.0
+P4,baseline,2.0,2.6,2.25,2.75
+P5,haptic,6.0,6.6,6.0,5.0
+P5,baseline,2.0,3.0,2.25,2.25
+P6,baseline,3.0,3.8,3.0,2.5
+P6,haptic,5.0,5.2,4.5,3.75
+P7,haptic,6.0,7.0,6.5,5.5
