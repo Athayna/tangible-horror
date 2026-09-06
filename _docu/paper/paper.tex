@@ -19,7 +19,9 @@
 \settopmatter{printfolios=true}
 
 \usepackage{booktabs}
-\usepackage[section]{placeins} % keep each section's floats inside that section
+% placeins' [section] option redefines \section, which acmart rejects.
+% Load it plain and use \FloatBarrier explicitly where a section must hold its floats.
+\usepackage{placeins}
 
 % Draft marker for missing numbers and open decisions.
 % Remove all \todoin{...} before submission.
