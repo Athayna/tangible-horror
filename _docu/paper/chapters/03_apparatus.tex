@@ -3,7 +3,54 @@
 \section{Apparatus}
 \label{sec:apparatus}
 
-The player starts inside a dimly lit wooden cabin. A lock with four coin-shaped slots bars the front door; the way out is to find four golden coins hidden around the room and insert them into the lock. Dark ambient music and the cramped, cluttered interior set the tone before anything threatens the player.
+\begin{figure}[t]
+  \centering
+  \coverimg{3.3cm}{room.jpeg}\par\smallskip
+  \coverimg{3.3cm}{room-virtual.png}
+  \caption{The prepared work room (top) and the cabin the player sees from the same position (bottom). Office furniture carries the surfaces the player is likely to touch; Section~\ref{sec:apparatus-implementation} lists which virtual objects have a physical counterpart and which have none.}
+  \Description{A photo of the work room with all stations and the virtual room from the same viewpoint.}
+  \label{fig:room-cabin}
+\end{figure}
+
+% A full-width figure* can never appear on the page where it is declared:
+% LaTeX always defers it. Declaring it at the top of the section is what
+% lands it beside the challenge descriptions instead of a page later.
+\begin{figure*}[t]
+  \centering
+  \begin{subfigure}[t]{0.235\textwidth}
+    \centering
+    \coverimg{2.4cm}{eyes-virtual.png}
+    \coverimg{2.4cm}{eyes.jpeg}
+    \caption{Eyes}
+    \label{fig:ch-eyes}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.235\textwidth}
+    \centering
+    \coverimg{2.4cm}{bucket-virtual.png}
+    \coverimg{2.4cm}{bucket-inside.jpeg}
+    \caption{Maggots}
+    \label{fig:ch-maggots}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.235\textwidth}
+    \centering
+    \coverimg{2.4cm}{pipe-virtual.png}
+    \coverimg[0.5][0 {.3\height} 0 0]{2.4cm}{pipe-inside.jpeg}
+    \caption{Pipe}
+    \label{fig:ch-pipe}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.235\textwidth}
+    \centering
+    \coverimg{2.4cm}{closet-virtual.png}
+    \coverimg[0.5][{.1\height} {.3\height} {.1\height} {.1\height}]{2.4cm}{spider-webs.jpeg}
+    \caption{Webs}
+    \label{fig:ch-webs}
+  \end{subfigure}
+  \caption{The four challenges. Top row: the virtual object the player sees. Bottom row: the physical proxy the player's hand finds in the haptic condition.}
+  \Description{A four-column grid. Each column pairs a screenshot of a virtual horror object with a photograph of the everyday object used as its physical stand-in.}
+  \label{fig:challenges}
+\end{figure*}
+
+The player starts inside a dimly lit wooden cabin (Figure~\ref{fig:room-cabin}). A lock with four coin-shaped slots bars the front door; the way out is to find four golden coins hidden around the room and insert them into the lock. Dark ambient music and the cramped, cluttered interior set the tone before anything threatens the player.
 
 Each coin hides inside one of four challenges, described in Section~\ref{sec:apparatus-challenges}, so the search forces the player to interact with every station in the room. The game has no time limit and no fail state; players can take as long as they want, and nothing punishes hesitation. The discomfort lies in what the player has to touch to get each coin. Once the fourth coin clicks into place, the lock opens and a win screen ends the session. We chose this flow for the study because it guarantees that each participant encounters all four haptic (or non-haptic) interactions in a single playthrough, while leaving the order of the challenges up to the player.
 

@@ -22,6 +22,73 @@
 % placeins' [section] option redefines \section, which acmart rejects.
 % Load it plain and use \FloatBarrier explicitly where a section must hold its floats.
 \usepackage{placeins}
+\usepackage{subcaption}   % (a)/(b) labels inside a multi-panel figure
+\usepackage{adjustbox}    % provides \clipbox, used by \coverimg below
+
+% Float placement. LaTeX reserves a lot of each page for text by default, which
+% pushes big figures onto later pages; these give figures more room at the top.
+% The dbl... versions apply to full-width figure* floats in two-column mode, and
+% dblfloatfix stops LaTeX deferring such a float further than it needs to.
+\usepackage{dblfloatfix}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\dbltopfraction}{0.9}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\dblfloatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{dbltopnumber}{2}
+\setcounter{totalnumber}{4}
+
+% Look for images here, so a \coverimg only needs the bare file name.
+\graphicspath{{figures/}{../study-photos/}{../ingame-photos/}}
+
+% --- image helpers --------------------------------------------------------
+% Photos out of a phone are portrait and huge. Never give \includegraphics both
+% a width and a height without keepaspectratio: that stretches the picture.
+% Use one of these two instead.
+%
+% \figimg{<height>}{<file>}
+%   Fits the whole image inside the column width AND the given height. Nothing
+%   is stretched or cut off, but a portrait photo leaves white space beside it.
+\newcommand{\figimg}[2]{%
+  \includegraphics[width=\linewidth,height=#1,keepaspectratio]{#2}}
+%
+% \coverimg[<bias>][<trim>]{<height>}{<file>}
+%   Fills the column at exactly the given height and crops whatever does not
+%   fit. The aspect ratio is kept, so nothing is stretched. Use this for panels
+%   that must line up in a grid.
+%   <bias>  which part survives the automatic crop: 0 = keep the top (or left),
+%           0.5 = keep the middle (default), 1 = keep the bottom.
+%   <trim>  optional extra crop taken off the source photo BEFORE it is fitted,
+%           given as "left bottom right top". Use fractions of \height and
+%           \width so it does not depend on the pixel size of the photo, e.g.
+%           [0.5][0 {.3\height} 0 0] cuts the bottom third away first.
+%   Both options are positional: to pass a trim you must also pass a bias.
+\newsavebox{\covbox}
+\newlength{\covl}\newlength{\covb}\newlength{\covr}\newlength{\covt}
+\NewDocumentCommand{\coverimg}{ O{0.5} O{0 0 0 0} m m }{%
+  % adjustbox (not plain graphicx) is what accepts \height/\width in a trim.
+  \sbox\covbox{\adjustbox{trim={#2},clip,width=\linewidth}{\includegraphics{#4}}}%
+  \ifdim\ht\covbox<#3\relax
+    \sbox\covbox{\adjustbox{trim={#2},clip,height=#3}{\includegraphics{#4}}}%
+  \fi
+  \setlength{\covl}{\wd\covbox}\addtolength{\covl}{-\linewidth}%
+  \setlength{\covt}{\ht\covbox}\addtolength{\covt}{-#3}%
+  \setlength{\covr}{\covl}\setlength{\covb}{\covt}%
+  \setlength{\covl}{#1\covl}\addtolength{\covr}{-\covl}%
+  \setlength{\covt}{#1\covt}\addtolength{\covb}{-\covt}%
+  % \clipbox does not expand its argument, so build it with \edef first.
+  \edef\covargs{\the\covl\space\the\covb\space\the\covr\space\the\covt}%
+  \expandafter\clipbox\expandafter{\covargs}{\usebox\covbox}}
+
+% Draft placeholder for figures whose image files do not exist yet.
+% To use a real image: comment out the \phold line and uncomment the
+% \includegraphics line above it. Remove this macro once all are replaced.
+\newcommand{\phold}[2]{%  #1 = box height, #2 = what the panel should show
+  \fcolorbox{black!30}{black!5}{%
+    \begin{minipage}[c][\dimexpr#1-2\fboxsep-2\fboxrule\relax][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+      \centering\footnotesize\itshape\color{black!60}#2
+    \end{minipage}}}
 
 % Draft marker for missing numbers and open decisions.
 % Remove all \todoin{...} before submission.
@@ -52,6 +119,23 @@
 \end{abstract}
 
 \keywords{virtual reality, passive haptics, presence, immersion, horror, tangible proxies, IPQ}
+
+% Teaser: the full-width strip under title and authors on page 1.
+% Three panels, or drop to two by widening them to 0.49\textwidth.
+\begin{teaserfigure}
+  \begin{minipage}[c]{0.325\textwidth}
+    \coverimg{3.0cm}{room.jpeg}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.325\textwidth}
+    \coverimg{3.0cm}{bucket-inside.jpeg}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.325\textwidth}
+    \coverimg{3.0cm}{room-virtual.png}
+  \end{minipage}
+  \caption{In \emph{Tangible Horror} the player is locked in a cabin and has to recover four coins from four unpleasant hiding places. In the haptic condition each hiding place has a physical counterpart the player reaches into with bare hands, here a bucket of gummy worms standing in for a bucket of maggots.}
+  \Description{Three panels: the study room with proxy stations, the proxy bucket and gummy worms, and the virtual room with all challenges.}
+  \label{fig:teaser}
+\end{teaserfigure}
 
 \maketitle
 
