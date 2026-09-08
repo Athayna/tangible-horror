@@ -7,9 +7,8 @@ using UnityEngine.Events;
 /// </summary>
 public class CoinLockSlot : MonoBehaviour
 {
-    [SerializeField] private GameObject doubloonMesh;
-    [SerializeField, Tooltip("World scale of the mesh that replaces the swallowed coin.")]
-    private float insertedMeshScale = 0.02f;
+    [SerializeField, Tooltip("The doubloon that will be shown in this slot.")]
+    private GameObject doubloon;
     public UnityEvent onCoinInserted;
     private bool isFilled;
 
@@ -27,23 +26,22 @@ public class CoinLockSlot : MonoBehaviour
         foreach (Collider c in coin.GetComponentsInChildren<Collider>()) c.enabled = false;
         Destroy(coin);
 
-        SpawnMesh();
+        EnableDoubloon();
         onCoinInserted.Invoke();
 
         Debug.Log("Coin ingested.");
         enabled = false;
     }
 
-    private void SpawnMesh()
+    private void EnableDoubloon()
     {
-        if (!doubloonMesh)
+        if (!doubloon)
         {
-            Debug.LogError($"CoinLockSlot {name}: no Doubloon Mesh assigned, the slot stays empty.", this);
+            Debug.LogError($"CoinLockSlot {name}: no Doubloon assigned, the slot stays empty.", this);
             return;
         }
 
-        GameObject mesh = Instantiate(doubloonMesh, transform.position, transform.rotation);
-        mesh.transform.localRotation = Quaternion.Euler(0, 0, 90);
-        mesh.transform.localScale = Vector3.one * insertedMeshScale;
+        doubloon.SetActive(true);
+        //doubloon.transform.localScale = new Vector3(0.012f, 0.012f, 0.012f);
     }
 }
