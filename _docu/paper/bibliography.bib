@@ -458,6 +458,130 @@
 }
 
 % ===========================================================================
+% Software, Hardware und Assets
+% ===========================================================================
+%
+% Versionen gegen die Projektdateien geprueft:
+%   ProjectSettings/ProjectVersion.txt -> Unity 6000.3.16f1
+%   Packages/manifest.json             -> com.meta.xr.sdk.all 201.0.0,
+%                                         com.unity.render-pipelines.universal 17.3.0,
+%                                         com.unity.xr.openxr 1.17.0,
+%                                         jp.keijiro.apriltag 1.0.3
+%   Assets/Scripts/AprilTagTracking/AprilTagPipeline.cs
+%                                      -> Family.CreateTagStandard41h12()
+% Die Asset-Packs sind einzeln in der README des Repos aufgelistet; hier wird
+% jeweils nur der Marktplatz zitiert, nicht jedes Pack.
+
+% VERIFIED: Seite abgerufen, Titel und Herausgeber bestaetigt.
+@misc{unity,
+  author       = {{Unity Technologies}},
+  title        = {Unity 6},
+  year         = {2026},
+  howpublished = {\url{https://unity.com/releases/unity-6}},
+  note         = {Version 6000.3.16f1. Zugriff: 09.09.2026}
+}
+
+% VERIFIED: Seite abgerufen (Weiterleitung von der Paketdokumentation
+% com.unity.render-pipelines.universal 17.3 auf das Handbuch 6000.3).
+@misc{unity-urp,
+  author       = {{Unity Technologies}},
+  title        = {Introduction to the {Universal Render Pipeline}},
+  year         = {2026},
+  howpublished = {\url{https://docs.unity3d.com/6000.3/Documentation/Manual/urp/urp-introduction.html}},
+  note         = {Unity 6.3 LTS Manual. Zugriff: 09.09.2026}
+}
+
+% VERIFIED: Seite abgerufen, Name und Betreiber bestaetigt.
+@misc{unity-asset-store,
+  year         = {2026},
+  author       = {{Unity Technologies}},
+  title        = {Unity Asset Store},
+  howpublished = {\url{https://assetstore.unity.com/}},
+  note         = {Zugriff: 09.09.2026}
+}
+
+% VERIFY: fab.com beantwortet den automatisierten Abruf mit HTTP 403, Titel und
+% Betreiber daher ungeprueft. Quelle des Doubloon-Modells der Muenzen.
+@misc{fab,
+  year         = {2026},
+  author       = {{Epic Games}},
+  title        = {Fab},
+  howpublished = {\url{https://www.fab.com/}},
+  note         = {Zugriff: 09.09.2026}
+}
+
+% VERIFIED: Produktseite abgerufen, Produktname bestaetigt.
+@misc{quest3,
+  year         = {2026},
+  author       = {{Meta Platforms}},
+  title        = {Meta Quest 3},
+  howpublished = {\url{https://www.meta.com/quest/quest-3/}},
+  note         = {Zugriff: 09.09.2026}
+}
+
+% VERIFIED: Seite abgerufen. Im Projekt ist das All-in-One-Paket
+% (com.meta.xr.sdk.all 201.0.0) installiert, das die hier gelisteten SDKs
+% bundelt.
+@misc{meta-xr-sdk,
+  year         = {2026},
+  author       = {{Meta Platforms}},
+  title        = {Meta {XR} {SDKs} for Unity},
+  howpublished = {\url{https://developers.meta.com/horizon/documentation/unity/unity-sdks-overview/}},
+  note         = {Version 201.0.0. Zugriff: 09.09.2026}
+}
+
+% VERIFIED: Seite abgerufen. Belegt die Application Spatial Anchors, die die
+% Kalibrierung ueber Sitzungen hinweg halten.
+@misc{meta-spatial-anchors,
+  year         = {2026},
+  author       = {{Meta Platforms}},
+  title        = {Spatial Anchors Overview},
+  howpublished = {\url{https://developers.meta.com/horizon/documentation/unity/unity-spatial-anchors-overview/}},
+  note         = {Meta Horizon OS Developers. Zugriff: 09.09.2026}
+}
+
+% VERIFIED: Seite abgerufen. Hand Grab Interactor und Hand Grab Interactable
+% sind Teil der Interaction SDK; sie tragen den Fallback der Muenzverfolgung.
+@misc{meta-hand-grab,
+  year         = {2026},
+  author       = {{Meta Platforms}},
+  title        = {Hand Grab Interactions},
+  howpublished = {\url{https://developers.meta.com/horizon/documentation/unity/unity-isdk-hand-grab-interaction/}},
+  note         = {Meta Horizon OS Developers, Interaction SDK. Zugriff: 09.09.2026}
+}
+
+% VERIFIED: Seite abgerufen, Standardname und Gremium bestaetigt.
+@misc{openxr,
+  year         = {2026},
+  author       = {{The Khronos Group}},
+  title        = {{OpenXR}},
+  howpublished = {\url{https://www.khronos.org/openxr/}},
+  note         = {Unity-Anbindung com.unity.xr.openxr 1.17.0. Zugriff: 09.09.2026}
+}
+
+% VERIFIED: Repository abgerufen. Die README nennt Olson.2011, Wang & Olson 2016
+% und Krogius.2019 als zu zitierende Arbeiten und AprilTag 3 als aktuelle
+% Version.
+@misc{apriltag-repo,
+  year         = {2026},
+  author       = {{AprilRobotics}},
+  title        = {{AprilTag}: A Visual Fiducial System Popular in Robotics Research},
+  howpublished = {\url{https://github.com/AprilRobotics/apriltag}},
+  note         = {Zugriff: 09.09.2026}
+}
+
+% VERIFIED: Repository abgerufen, Paketmetadaten aus dem PackageCache
+% (jp.keijiro.apriltag 1.0.3, BSD-2-Clause). Die im Prototyp eingesetzte
+% Unity-Anbindung des nativen AprilTag-Detektors.
+@misc{apriltag-unity,
+  year         = {2026},
+  author       = {Takahashi, Keijiro},
+  title        = {jp.keijiro.apriltag: {AprilTag} Tracker for Unity},
+  howpublished = {\url{https://github.com/keijiro/jp.keijiro.apriltag}},
+  note         = {Version 1.0.3. Zugriff: 09.09.2026}
+}
+
+% ===========================================================================
 % Noch zu beschaffen
 % ===========================================================================
 %
